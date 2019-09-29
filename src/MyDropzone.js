@@ -6,9 +6,10 @@ export default function MyDropzone(multiple) {
    const [files, setFiles] = useState([]);
    const {getRootProps, getInputProps} = useDropzone({
     onDrop: acceptedFiles => {
-      setFiles(acceptedFiles.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })));
+      setFiles(acceptedFiles.map(file => {
+        return Object.assign(file, {preview: URL.createObjectURL(file)})
+      }
+    ));
     }
   });
 
@@ -50,6 +51,7 @@ export default function MyDropzone(multiple) {
   return (
     <section className="container">
       <div {...getRootProps({className: 'dropzone'})}>
+
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
