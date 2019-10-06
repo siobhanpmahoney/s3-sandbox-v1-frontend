@@ -1,0 +1,8 @@
+{
+	"editor.stablePeek": true,
+	"editor.tabSize": 2,
+	"prettier.singleQuote": false,
+	"prettier.tabWidth": 2,
+	"prettier.useTabs": false,
+	"bookmarks.navigateThroughAllFiles": true
+}
