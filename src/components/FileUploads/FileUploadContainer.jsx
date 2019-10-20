@@ -47,17 +47,8 @@ class FileUploadContainer extends React.Component {
         <div>
           <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
 
-{/*
-          <div>
-            <h3>Upload Files</h3>
-
-            <form onSubmit={this.sendToS3}>
-              <input onChange={this.onAddFileData} type="file" name="file" ref={this.fileInput} multiple />
-              <button type="submit"> Submit </button>
-            </form>
-          </div>
-*/}
           <hr />
+          
           {!!this.state.preview &&
             <div>
               <h5>Upload Preview</h5>
