@@ -2,7 +2,7 @@ import React from 'react'
 import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
 
-class FileList extends React.Component {
+class FileListContainer extends React.Component {
   constructor(props) {
     super(props)
 
@@ -66,4 +66,4 @@ class FileList extends React.Component {
 
 }
 
-export default FileList
+export default FileListContainer
