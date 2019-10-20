@@ -13,6 +13,7 @@ class App extends React.Component {
 			view: null,
 			example: {},
 			files: [],
+			preview: null
 		};
 		this.fileInput = React.createRef();
 		this.onAddFileData = this._onAddFileData.bind(this);
@@ -20,7 +21,7 @@ class App extends React.Component {
 
 	componentDidMount() {
 		this.setState({
-			view: null
+			view: "upload"
 		})
 	}
 
@@ -33,60 +34,70 @@ class App extends React.Component {
 
 	}
 
-	addFileToState = file => {
-		let stateFiles = [...this.state.files, file];
-		this.setState({
-			files: stateFiles,
-		});
-	};
 
 	_onAddFileData = event => {
-		const file = this.fileInput.current.files[0];
-		const reader = new FileReader();
 
-		let fileUploadState = this.state.files.splice(0);
-		fileUploadState = [...this.fileInput.current.files];
-		console.log('fileUploadState', fileUploadState);
+		let reader = new FileReader()
+		reader.readAsDataURL(event.target.files[0])
+		console.log(URL.createObjectURL(event.target.files[0]))
 
-		reader.onloadend = () => {
-			this.setState({
-				example: { url: reader.result },
-				files: fileUploadState,
-			});
+
+		this.setState({
+			files: [...this.fileInput.current.files],
+			preview: URL.createObjectURL(event.target.files[0]),
+		});
+
+
+
+		// const file = this.fileInput.current.files[0];
+
+
+
+		// const reader = new FileReader();
+		// reader.onloadend = () => {
+			// this.setState({
+			// 	// example: { url: reader.result },
+			// 	files: fileUploadState,
+			// 	preview: event.target.value,
+			// });
 			// this.setState({
 			//   files:
 			// })
-		};
+		// };
 
-		if (file) {
-			reader.readAsDataURL(file);
-			let url = reader.result;
-			this.setState(
-				{
-					example: { url: url },
-					files: fileUploadState,
-				},
-				console.log('state?'),
-				this.state
-			);
-		}
-		let name = event.target.name;
-		let value = event.target.value;
-		let ex = Object.assign({}, this.state.example);
-		ex[name] = value;
-		this.setState(
-			{
-				example: ex,
-			},
-			console.log(ex)
-		);
+		// if (file) {
+		// 	reader.readAsDataURL(file);
+		// 	let url = reader.result;
+		// 	this.setState(
+		// 		{
+		// 			example: { url: url },
+		// 			files: fileUploadState,
+		// 		},
+		// 		// console.log('state?'),
+		// 		// this.state
+		// 	);
+		// }
+		// let name = event.target.name;
+		// let value = event.target.value;
+		// let ex = Object.assign({}, this.state.example);
+		//
+		// // ex[name] = value;
+		// console.log("ex", ex)
+		// this.setState(
+		// 	{
+				// example: ex,
+				// preview: URL.createObjectURL(value);
+
+			// 	preview: value
+			// },
+			// console.log(URL.createObjectURL(value))
+		// );
 	};
 
 	sendToS3 = event => {
 		event.preventDefault();
 		let formdata = new FormData();
-
-		formdata.append('song_id', '1');
+		formdata.append('song_id', '2');
 		formdata.append('file', this.state.files[0]);
 
 		fetch('http://localhost:3000/api/v1/versions', {
@@ -99,8 +110,19 @@ class App extends React.Component {
 		// })
 	};
 
+	renderPreview = () => {
+		console.log(this.state.preview)
+
+		return (
+			<div>
+				<audio controls>
+					<source src={this.state.preview} type="audio/x-m4a" controls / >
+				</audio>
+			</div>
+		)
+	}
+
 	render() {
-		console.log('state: ', this.state);
 		return (
 			<div>
 				{this.state.view !== "upload" ? (
@@ -118,22 +140,17 @@ class App extends React.Component {
 
 							<form onSubmit={this.sendToS3}>
 								<input onChange={this.onAddFileData} type="file" name="file" ref={this.fileInput} multiple />
-								<button type="submit">Fake Submit</button>
+								<button type="submit"> Submit</button>
 							</form>
 						</div>
 
 						<hr />
-						<div>
-							<h3>Dropzone 1:</h3>
-							<MyDropzone addFileToState={this.onAddFileData} />
-						</div>
-
-						<hr />
-
-						<div>
-							<h3>Dropzone 1:</h3>
-							<MyDropzone2 addFileToState={this.addFileToState} />
-						</div>
+						{!!this.state.preview &&
+							<div>
+								<h5>Upload Preview</h5>
+								{this.renderPreview()}
+							</div>
+						}
 					</div>
 					)
 				}

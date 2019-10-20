@@ -2,25 +2,6 @@ import React from 'react'
 import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
 
-//songFile schema:
-
-// [{
-//   album_id: {
-//     name: "album_name",
-//     songs: [{
-//       song_id: {
-//         title: "song_name_1",
-//         versions: [{
-//           version_id: {
-//             s3_key: "s3Key",
-//             date: "date"
-//           }
-//         }]
-//       }
-//     }]
-//   }}
-// }]
-
 class FileList extends React.Component {
   constructor(props) {
     super(props)
@@ -39,8 +20,11 @@ class FileList extends React.Component {
     }, this.fetchSongData)
   }
 
+  getSignedUrl = () => {
+
+  }
+
   fetchSongData = () => {
-    
     fetch("http://localhost:3000/api/v1/albums")
     .then(results => results.json())
     .then(json => {
@@ -48,8 +32,7 @@ class FileList extends React.Component {
       return this.setState({
         songListData: json
       })
-  }
-  )
+    })
   }
 
   selectViewOption = (event) => {
