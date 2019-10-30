@@ -17,23 +17,24 @@ class FileListContainer extends React.Component {
     this.setState({
       view: null,
       files: {}
-    }, this.fetchSongData)
+    })
+    // this.fetchSongData
   }
 
   getSignedUrl = () => {
 
   }
-
-  fetchSongData = () => {
-    fetch("http://localhost:3000/api/v1/albums")
-    .then(results => results.json())
-    .then(json => {
-      console.log(json)
-      return this.setState({
-        songListData: json
-      })
-    })
-  }
+  // 
+  // fetchSongData = () => {
+  //   fetch("http://localhost:3000/api/v1/albums")
+  //   .then(results => results.json())
+  //   .then(json => {
+  //     console.log(json)
+  //     return this.setState({
+  //       songListData: json
+  //     })
+  //   })
+  // }
 
   selectViewOption = (event) => {
     let value = event.target.value
@@ -45,13 +46,13 @@ class FileListContainer extends React.Component {
   render(){
     if (this.state.view == "audio") {
       return (
-        <SongListDataWithAudio songListData={this.state.songListData} songFiles={this.state.songFiles} selectViewOption={this.selectViewOption} />
+        <SongListDataWithAudio songListData={this.props.songListData} songFiles={this.state.songFiles} selectViewOption={this.selectViewOption} />
         )
 
       // eslint-disable-next-line eqeqeq
       } else if (this.state.view == "data") {
          return (
-         <SongListData songListData={this.state.songListData} selectViewOption={this.selectViewOption} />
+         <SongListData songListData={this.props.songListData} selectViewOption={this.selectViewOption} />
          )
       } else {
         return (
