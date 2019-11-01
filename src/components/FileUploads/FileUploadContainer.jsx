@@ -32,8 +32,14 @@ class FileUploadContainer extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-     this.returnFileMetadata()
+  componentDidUpdate(prevProps, prevState) {
+     // this.returnFileMetadata()
+     if (this.state.fileMetadata["album"] != prevState.fileMetadata["album"]) {
+       if (this.state.fileMetadata["album"] == null) {
+         this.renderAlbumOptions()
+       }
+       this.renderSongOptions()
+     }
   }
 
   parseMusicData = () => {
@@ -46,14 +52,20 @@ class FileUploadContainer extends React.Component {
   }
 
   renderAlbumOptions = () => {
-    return this.state.albumList
+
+    if (this.state.fileMetadata["album"] == null) {
+      return this.state.albumList
+    } else {
+      return this.state.albumList.find((album) => album.id == this.state.fileMetadata.album.id)
+    }
   }
 
   renderSongOptions = () => {
-     if (!!this.state.fileMetadata.album) {
+     if (this.state.fileMetadata.album != null) {
+       console.log(this.state.songList[this.state.fileMetadata.album.id])
        return this.state.songList[this.state.fileMetadata.album.id]
      } else {
-         return Object.keys(this.state.songList).map((album_id) => this.state.songList[album_id].map((song) => song)).flat()
+       return Object.keys(this.state.songList).map((album_id) => this.state.songList[album_id].map((song) => song)).flat()
      }
   }
 
@@ -76,14 +88,63 @@ class FileUploadContainer extends React.Component {
   //   })
   // }
 
-  handleChange = (newValue, actionMeta) => {
+  handleChange = (newValue, actionMeta: any) => {
     // let album_id = newValue
-    let album = this.state.albumList.find((album) => album.id == newValue.value)
+    // if (actionMeta.action == "clear") {
+    //
+    // }
+    if (actionMeta.name == "album") {
+      this.onSelectAlbum(newValue)
+    } else {
+      this.onSelectSong(newValue)
+    }
+
+    // let album = this.state.albumList.find((album) => album.id == newValue.value)
+    // let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
+    // fileMetadataCopy[actionMeta.name] = album
+    // this.setState({
+    //   fileMetadata: fileMetadataCopy
+    // }, this.renderSongOptions)
+  }
+
+  onSelectAlbum = (selectedValue) => {
+    let album = this.state.albumList.find((album) => album.id == selectedValue.value)
     let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
-    fileMetadataCopy[actionMeta.name] = album
+    fileMetadataCopy["album"] = album
     this.setState({
       fileMetadata: fileMetadataCopy
     }, this.renderSongOptions)
+  }
+
+  onSelectSong = (selectedValue) => {
+    let song = null
+    if (this.state.fileMetadata["album"] == null) { // if song is selected before album is selected, find the associated album
+      let fileMetadataSongs = Object.assign({}, this.state.fileMetadata["songs"])
+      let i = 0
+      let album = null
+      while (i < Object.keys(fileMetadataSongs)) {
+        if (fileMetadataSongs[i].find((s) => s.id == selectedValue.value)) {
+          return song = fileMetadataSongs[i].find((s) => s.id == selectedValue.value)
+        } else {
+          i++
+        }
+        album = this.state.albumList.find((a) => a.id == i)
+      }
+      let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
+      fileMetadataCopy["album"] = album
+      fileMetadataCopy["song"] = song
+      this.setState({
+        fileMetadata: fileMetadataCopy
+      })
+    } else {
+
+      song = this.state.songList[this.state.fileMetadata.album.id].find((s) => s.id == selectedValue.value)
+      let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
+      fileMetadataCopy["song"] = song
+      this.setState({
+        fileMetadata: fileMetadataCopy
+      })
+    }
   }
 
 
@@ -116,9 +177,9 @@ class FileUploadContainer extends React.Component {
     }
 
     render() {
-      if (this.state.albumList && this.state.albumList.length > 0 ) {
-        console.log("songList", this.renderSongOptions())
-      }
+      // if (this.state.albumList && this.state.albumList.length > 0 ) {
+      //   console.log("songList", this.renderSongOptions())
+      // }
 
       return (
         <div>

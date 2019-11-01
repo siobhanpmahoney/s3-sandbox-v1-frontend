@@ -15,7 +15,7 @@ const FileUploadForm = ({sendToS3, onAddFileData, fileInput, musicData, onAddFil
 
 
   const parsedSongOptions = () => {
-    if (!!songOptions && Object.keys(songList).length > 0) {
+    if (!!songOptions && Object.keys(songOptions).length > 0) {
       return songOptions.map((song) => {
         return {value: song.id, label: song.title}
       })
@@ -38,6 +38,8 @@ const FileUploadForm = ({sendToS3, onAddFileData, fileInput, musicData, onAddFil
           options={parsedAlbumOptions()}
           name="album"
           defaultOptions
+          defaultValue={fileMetadata["album"]}
+          isClearable
           />
 
           <CreatableSelect
@@ -47,6 +49,8 @@ const FileUploadForm = ({sendToS3, onAddFileData, fileInput, musicData, onAddFil
             options={parsedSongOptions()}
             name="song"
             defaultOptions
+            defaultValue={fileMetadata["song"]}
+            isClearable
           />
         </div>
 }
