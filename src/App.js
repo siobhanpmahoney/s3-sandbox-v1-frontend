@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {fetchAlbums} from './service'
+import {fetchAlbums, fetchSongs} from './service'
 import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
 
@@ -10,7 +10,9 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			view: null,
-			musicData: []
+			albumData: [],
+			songData: [],
+			_legacyMusicData: []
 		};
 
 	}
@@ -19,12 +21,23 @@ class App extends React.Component {
 		this.fetchAlbumsForState()
 		.then(res => this.setState({
 			view: "upload",
-			musicData: res
+			albumData: res
+		}))
+		.then(x => this.fetchSongsForState())
+		.then(results => this.setState({
+			songData: results
 		}))
 	}
 
 	fetchAlbumsForState = () => {
 		return fetchAlbums()
+		.then(json => {
+			return json
+		})
+	}
+
+	fetchSongsForState = () => {
+		return fetchSongs()
 		.then(json => {
 			return json
 		})
@@ -46,7 +59,7 @@ class App extends React.Component {
 				{this.state.view !== "upload" ? (
 					<div>
 						<button onClick={this.switchView} value="upload">Switch View: Upload</button>
-						<FileListContainer songListData={this.state.musicData || []}/>
+						<FileListContainer songListData={this.state._legacyMusicData || []}/>
 					</div>
 
 				) : (
@@ -54,7 +67,7 @@ class App extends React.Component {
 				<div>
 						<button value="files" onClick={this.switchView}>Switch View: Song List </button>
 
-				<FileUploadContainer musicData={this.state.musicData || []} />
+				<FileUploadContainer albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
 
 				</div>
 			)

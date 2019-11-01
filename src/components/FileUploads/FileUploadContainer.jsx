@@ -9,69 +9,148 @@ class FileUploadContainer extends React.Component {
     this.state = {
       files: [],
       preview: null,
-      albumList: null, // [],
-      songList: null, // {}, indexed by Album id
-      fileMetadata: {
-        album: null,
-        song: null,
-        version: null,
-        description: null
-      }
+      albumInput: null,
+      songInput: null
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
+    this.onSelectAlbum = this._onSelectAlbum.bind(this)
+    this.onSelectSong = this._onSelectSong.bind(this)
   }
 
   componentDidMount() {
-    if (!!this.props.musicData && this.props.musicData.length > 0) {
-      let musicData = this.parseMusicData()
-      this.setState({
-        albumList: musicData.albums,
-        songList: musicData.songs
-      }, () => console.log(this.state))
-    }
+    return this.parseAlbumOptions()
+
   }
 
   componentDidUpdate(prevProps, prevState) {
-     // this.returnFileMetadata()
-     if (this.state.fileMetadata["album"] != prevState.fileMetadata["album"]) {
-       if (this.state.fileMetadata["album"] == null) {
-         this.renderAlbumOptions()
-       }
-       this.renderSongOptions()
-     }
+
   }
 
-  parseMusicData = () => {
-    let songs = {}
-    let albums = this.props.musicData.map((album => {
-      songs[album.id] = album.songs
-      return {id: album.id, title: album.title, s3_key: album.s3_key, etag: album.etag}
-    }))
-    return {albums: albums, songs: songs}
+  parseAlbumOptions = () => {
+      if (this.state.songInput != null) {
+        let album = this.props.albumData.find((album) => album.id == this.state.songInput.album_id )
+        return {value: album.id, label: album.title}
+      } else {
+        return this.props.albumData.map((album) => {
+          return {value: album.id, label: album.title}
+        })
+      }
   }
 
-  renderAlbumOptions = () => {
-
-    if (this.state.fileMetadata["album"] == null) {
-      return this.state.albumList
+  parseSongOptions = () => {
+    console.log("getting parsed?")
+    if (this.state.albumInput != null) {
+      return this.props.songData.filter((song) => song.album_id == this.state.albumInput.id)
+      .map((s) => {
+        return { value: s.id, label: s.title }
+      })
     } else {
-      return this.state.albumList.find((album) => album.id == this.state.fileMetadata.album.id)
+      return this.props.songData.map((song) => {
+        return { value: song.id, label: song.title }
+      })
+    }
+
+  }
+
+
+  // handleChange = (newValue, actionMeta: any) => {
+  //   // let album_id = newValue
+  //   // if (actionMeta.action == "clear") {
+  //   //
+  //   // }
+  //   debugger
+  //   if (actionMeta.name == "album") {
+  //     this.onSelectAlbum(newValue)
+  //   } else {
+  //     this.onSelectSong(newValue)
+  //   }
+  //
+  //   //   let album = this.state.albumList.find((album) => album.id == selectedValue.value)
+  //   //   let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
+  //   //   fileMetadataCopy["album"] = album
+  //   //   this.setState({
+  //   //     fileMetadata: fileMetadataCopy
+  //   //   }, this._legacyRenderSongOptions)
+  //   // }
+  //   //
+  //
+  //   // let album = this.state.albumList.find((album) => album.id == newValue.value)
+  //   // let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
+  //   // fileMetadataCopy[actionMeta.name] = album
+  //   // this.setState({
+  //   //   fileMetadata: fileMetadataCopy
+  //   // }, this._legacyRenderSongOptions)
+  // }
+
+  handleChange = (newValue: any, actionMeta: any) => {
+    console.group('Value Changed');
+    console.log("actionMeta", actionMeta)
+    console.log("newValue", newValue)
+    console.log(`action: ${actionMeta.action}`);
+    console.log("actionMeta.name", actionMeta.name)
+    console.log("actionMeta.name == song", actionMeta.name == "song")
+    console.groupEnd();
+
+    if (actionMeta.name == "album") {
+      this.onSelectAlbum(newValue)
+    } else {
+      this.onSelectSong(newValue)
     }
   }
 
-  renderSongOptions = () => {
-     if (this.state.fileMetadata.album != null) {
-       console.log(this.state.songList[this.state.fileMetadata.album.id])
-       return this.state.songList[this.state.fileMetadata.album.id]
-     } else {
-       return Object.keys(this.state.songList).map((album_id) => this.state.songList[album_id].map((song) => song)).flat()
-     }
+  _onSelectAlbum = (newValue) => {
+    this.setState({
+      albumInput: this.props.albumData.find((album) => album.id == newValue.value)
+    }, this.parseSongOptions)
   }
 
-  returnFileMetadata = () => {
-    return this.state.fileMetadata
+  _onSelectSong = (newValue) => {
+    let song = this.props.songData.find((song) => song.id == newValue.value)
+    if (this.state.albumInput == null) {
+      let album = this.props.albumData.find((album) => album.id == song.album_id)
+      this.setState({
+        albumInput: album,
+        songInput: song
+      })
+    } else {
+      this.setState({
+        songInput: song
+      })
+    }
   }
+
+
+  // parse_legacyMusicData = () => {
+  //   let songs = {}
+  //   let albums = this.props._legacyMusicData.map((album => {
+  //     songs[album.id] = album.songs
+  //     return {id: album.id, title: album.title, s3_key: album.s3_key, etag: album.etag}
+  //   }))
+  //   return {albums: albums, songs: songs}
+  // }
+  //
+  // renderAlbumOptions = () => {
+  //
+  //   if (this.state.fileMetadata["album"] == null) {
+  //     return this.state.albumList
+  //   } else {
+  //     return this.state.albumList.find((album) => album.id == this.state.fileMetadata.album.id)
+  //   }
+  // }
+  //
+  // _legacyRenderSongOptions = () => {
+  //    if (this.state.fileMetadata.album != null) {
+  //      console.log(this.state.songList[this.state.fileMetadata.album.id])
+  //      return this.state.songList[this.state.fileMetadata.album.id]
+  //    } else {
+  //      return Object.keys(this.state.songList).map((album_id) => this.state.songList[album_id].map((song) => song)).flat()
+  //    }
+  // }
+
+  // returnFileMetadata = () => {
+  //   return this.state.fileMetadata
+  // }
 
   _onAddFileData = event => {
     this.setState({
@@ -88,65 +167,41 @@ class FileUploadContainer extends React.Component {
   //   })
   // }
 
-  handleChange = (newValue, actionMeta: any) => {
-    // let album_id = newValue
-    // if (actionMeta.action == "clear") {
-    //
-    // }
-    if (actionMeta.name == "album") {
-      this.onSelectAlbum(newValue)
-    } else {
-      this.onSelectSong(newValue)
-    }
 
-    // let album = this.state.albumList.find((album) => album.id == newValue.value)
-    // let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
-    // fileMetadataCopy[actionMeta.name] = album
-    // this.setState({
-    //   fileMetadata: fileMetadataCopy
-    // }, this.renderSongOptions)
-  }
 
-  onSelectAlbum = (selectedValue) => {
-    let album = this.state.albumList.find((album) => album.id == selectedValue.value)
-    let fileMetadataCopy = Object.assign({}, this.state.fileMetadata)
-    fileMetadataCopy["album"] = album
-    this.setState({
-      fileMetadata: fileMetadataCopy
-    }, this.renderSongOptions)
-  }
+  // onSelectAlbum = (selectedValue) => {
 
-  onSelectSong = (selectedValue) => {
-    let song = null
-    if (this.state.fileMetadata["album"] == null) { // if song is selected before album is selected, find the associated album
-      let fileMetadataSongs = Object.assign({}, this.state.fileMetadata["songs"])
-      let i = 0
-      let album = null
-      while (i < Object.keys(fileMetadataSongs)) {
-        if (fileMetadataSongs[i].find((s) => s.id == selectedValue.value)) {
-          return song = fileMetadataSongs[i].find((s) => s.id == selectedValue.value)
-        } else {
-          i++
-        }
-        album = this.state.albumList.find((a) => a.id == i)
-      }
-      let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
-      fileMetadataCopy["album"] = album
-      fileMetadataCopy["song"] = song
-      this.setState({
-        fileMetadata: fileMetadataCopy
-      })
-    } else {
-
-      song = this.state.songList[this.state.fileMetadata.album.id].find((s) => s.id == selectedValue.value)
-      let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
-      fileMetadataCopy["song"] = song
-      this.setState({
-        fileMetadata: fileMetadataCopy
-      })
-    }
-  }
-
+  // onSelectSong = (selectedValue) => {
+  //   let song = null
+  //   if (this.state.fileMetadata["album"] == null) { // if song is selected before album is selected, find the associated album
+  //     let fileMetadataSongs = Object.assign({}, this.state.fileMetadata["songs"])
+  //     let i = 0
+  //     let album = null
+  //     while (i < Object.keys(fileMetadataSongs)) {
+  //       if (fileMetadataSongs[i].find((s) => s.id == selectedValue.value)) {
+  //         return song = fileMetadataSongs[i].find((s) => s.id == selectedValue.value)
+  //       } else {
+  //         i++
+  //       }
+  //       album = this.state.albumList.find((a) => a.id == i)
+  //     }
+  //     let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
+  //     fileMetadataCopy["album"] = album
+  //     fileMetadataCopy["song"] = song
+  //     this.setState({
+  //       fileMetadata: fileMetadataCopy
+  //     })
+  //   } else {
+  //
+  //     song = this.state.songList[this.state.fileMetadata.album.id].find((s) => s.id == selectedValue.value)
+  //     let fileMetadataCopy = Object.assign({}, this.state.fileMetadataCopy)
+  //     fileMetadataCopy["song"] = song
+  //     this.setState({
+  //       fileMetadata: fileMetadataCopy
+  //     })
+  //   }
+  // }
+  //
 
 
   sendToS3 = event => {
@@ -178,33 +233,43 @@ class FileUploadContainer extends React.Component {
 
     render() {
       // if (this.state.albumList && this.state.albumList.length > 0 ) {
-      //   console.log("songList", this.renderSongOptions())
+      //   console.log("songList", this._legacyRenderSongOptions())
       // }
+      if (!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0) {
+        return (
+          <div>
+            <FileUploadForm
+              parseAlbumOptions={this.parseAlbumOptions}
+              parseSongOptions = {this.parseSongOptions}
+              handleChange={this.handleChange}
 
-      return (
-        <div>
-          {this.state.albumList && this.state.albumList.length > 0 ? (
+              albumInput={this.state.albumInput}
+              songInput={this.state.songInput}
+
+              sendToS3={this.sendToS3}
+              onAddFileData={this.onAddFileData}
+              fileInput={this.fileInput} />
+
+
+
+          <hr />
+
+          {!!this.state.preview &&
             <div>
-            <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} musicData={this.props.musicData} fileMetadata={this.returnFileMetadata()} albumList={this.state.albumList} songList = {this.state.songList} onAddFileMetadata={this.onAddFileMetadata} handleChange={this.handleChange} albumOptions = {this.renderAlbumOptions()} songOptions={this.renderSongOptions()}/>
-
-            <hr />
-
-            {!!this.state.preview &&
-              <div>
-                <h5>Upload Preview</h5>
-                {this.renderPreview()}
-              </div>
-            }
+              <h5>Upload Preview</h5>
+              {this.renderPreview()}
             </div>
-          ) : (
-              <div>loading..</div>
-          )
-
           }
-
-        </div>
-      )
+          </div>
+        )
+      } else {
+        return (
+          <div>loading..</div>
+        )
+      }
     }
   }
+
+              // <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} _legacyMusicData={this.props._legacyMusicData} fileMetadata={this.returnFileMetadata()} albumList={this.state.albumList} songList = {this.state.songList} onAddFileMetadata={this.onAddFileMetadata} handleChange={this.handleChange} albumOptions = {this.renderAlbumOptions()} songOptions={this._legacyRenderSongOptions()}/>
 
   export default FileUploadContainer
