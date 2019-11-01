@@ -5,15 +5,7 @@ import Select from 'react-select'
 
 // , _legacyMusicData, onAddFileMetadata, fileMetadata, albumList, songList, handleChange, albumOptions, songOptions
 
-const FileUploadForm = ({loadAlbumOptions, loadSongOptions, parseAlbumOptions, parseSongOptions, handleChange, albumInput, songInput, sendToS3, onAddFileData, fileInput}) => {
-
-  const albumOptions = () => {
-    return parseAlbumOptions()
-  }
-
-  const songOptions  = () => {
-    return parseSongOptions()
-  }
+const FileUploadForm = ({onSelectSong, sendToS3, onAddFileData, fileInput}) => {
 
 
   // const parsedAlbumOptions = () => {
@@ -38,31 +30,6 @@ const FileUploadForm = ({loadAlbumOptions, loadSongOptions, parseAlbumOptions, p
   return (
     <div>
       <h3>Upload Files</h3>
-        {!!albumOptions() && albumOptions().length > 0 && !!songOptions() && songOptions().length >= 0 &&
-          <div>
-                <Select
-                  onChange={handleChange}
-                  name="album"
-                  options = {parseAlbumOptions()}
-                  defaultValue={albumInput}
-                  isClearable
-                  />
-
-                <Select
-                    onChange={handleChange}
-                    name="song"
-                    options = {parseSongOptions()}
-                    defaultValue={songInput}
-                    isClearable
-                  />
-                <hr />
-
-
-
-
-
-              </div>
-        }
 
       <form onSubmit={sendToS3}>
         <input onChange={onAddFileData} type="file" name="file" ref={fileInput} multiple />
