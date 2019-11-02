@@ -107,11 +107,22 @@ class FileUploadContainer extends React.Component {
          this.setState({
           songInput: this.props.songData.find((song) => song.id == newValue.value)
         }, this.parseAlbumOptions)
-
-      }
-    }
-
+    }}
   }
+
+  // _onCreateAlbum = (inputValue: any) => {
+  //   setTimeout(() => {
+  //     const { options } = this.state;
+  //     const newOption = createOption(inputValue);
+  //     console.log(newOption);
+  //     console.groupEnd();
+  //     this.setState({
+  //       isLoading: false,
+  //       options: [...options, newOption],
+  //       value: newOption,
+  //     });
+  //   }, 1000)
+  // }
 
   _onAddFileData = event => {
     this.setState({
@@ -124,7 +135,7 @@ class FileUploadContainer extends React.Component {
   sendToS3 = event => {
     event.preventDefault();
     let formdata = new FormData();
-    formdata.append('song_id', '2');
+    formdata.append('song_id', this.state.songInput.id);
     formdata.append('file', this.state.files[0]);
 
     fetch('http://localhost:3000/api/v1/versions', {
@@ -136,7 +147,7 @@ class FileUploadContainer extends React.Component {
   };
 
   clearFileOnSubmit = () => {
-    this.setState({
+    return this.setState({
       files: [],
       preview: null
     })
@@ -162,9 +173,6 @@ class FileUploadContainer extends React.Component {
     }
 
     render() {
-      // if (this.state.albumList && this.state.albumList.length > 0 ) {
-      //   console.log("songList", this._legacyRenderSongOptions())
-      // }
 
         return (
           <div>
@@ -193,16 +201,5 @@ class FileUploadContainer extends React.Component {
 
     }
   }
-
-              // <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} _legacyMusicData={this.props._legacyMusicData} fileMetadata={this.returnFileMetadata()} albumList={this.state.albumList} songList = {this.state.songList} onAddFileMetadata={this.onAddFileMetadata} handleChange={this.handleChange} albumOptions = {this.renderAlbumOptions()} songOptions={this._legacyRenderSongOptions()}/>
-            //   <FileUploadForm
-            //     parseAlbumOptions={this.parseAlbumOptions}
-            //     parseSongOptions = {this.parseSongOptions}
-            //     onSelectSong = {this.onSelectSong}
-            //     handleChange={this.handleChange}
-            //     sendToS3={this.sendToS3}
-            //     onAddFileData={this.onAddFileData}
-            //     fileInput={this.fileInput} />
-            // }
 
   export default FileUploadContainer
