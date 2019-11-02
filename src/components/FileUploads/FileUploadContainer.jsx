@@ -27,20 +27,20 @@ class FileUploadContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (prevState.albumInput == this.state.albumInput) {
-    //   this.renderAlbumInput()
-    //   this.renderSongInput()
-    //   this.parseAlbumOptions()
-    //   this.parseSongOptions()
-    // }
-    //
-    // if (prevState.songInput == this.state.songInput) {
-    //   this.renderAlbumInput()
-    //
-    //   this.renderSongInput()
-    //   this.parseAlbumOptions()
-    //   this.parseSongOptions()
-    // }
+    if (prevState.albumInput == this.state.albumInput) {
+      this.renderAlbumInput()
+      this.renderSongInput()
+      this.parseAlbumOptions()
+      this.parseSongOptions()
+    }
+
+    if (prevState.songInput == this.state.songInput) {
+      this.renderAlbumInput()
+
+      this.renderSongInput()
+      this.parseAlbumOptions()
+      this.parseSongOptions()
+    }
   }
 
   parseAlbumOptions = () => {
@@ -68,9 +68,7 @@ class FileUploadContainer extends React.Component {
     )
 
     if (this.state.songInput && this.state.songInput.id == null) {
-      debugger
-      console.log("songs.push({value: null, label: this.state.songInput.title})", songs.push({value: null, label: this.state.songInput.title}))
-      songs.push({value: null, label: this.state.songInput.title})
+      return [...songs, {value: null, label: this.state.songInput.title}]
     }
     return songs
 
@@ -99,13 +97,13 @@ class FileUploadContainer extends React.Component {
   }
 
   _onSelectSong = (newValue) => {
-    debugger
+    console.log("newValue:", newValue)
     if (newValue == null) {
       this.setState({
         songInput: null
       })
     } else {
-      if (newValue.value == null) {
+      if (!!newValue.__isNew__) {
         this.onCreateSong(newValue)
       } else if (this.state.albumInput == null) {
         let song = this.props.songData.find((song) => song.id == newValue.value)
@@ -117,7 +115,6 @@ class FileUploadContainer extends React.Component {
         }, this.renderSongInput)
       } else {
         let song = this.props.songData.find((song) => song.id == newValue.value)
-        console.log("song: ", song)
          this.setState({
           songInput: song
         }, this.parseAlbumOptions)
@@ -128,8 +125,8 @@ class FileUploadContainer extends React.Component {
     console.log("inputValue: ", inputValue)
     let albumInput = this.state.albumInput
     return this.setState({
-      songInput: {id: null, title: inputValue, album_id: albumInput.id }
-    }, this.renderSongInput)
+      songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
+    }, this.parseSongOptions)
   }
 
   _onAddFileData = event => {
