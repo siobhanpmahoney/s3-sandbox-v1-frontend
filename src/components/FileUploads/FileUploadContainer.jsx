@@ -3,6 +3,7 @@ import FileUploadPreview from './FileUploadPreview'
 import FileUploadForm from './FileUploadForm'
 import FileAlbumInput from './FileAlbumInput'
 import FileSongInput from './FileSongInput'
+import { createSong } from '../../service'
 
 
 class FileUploadContainer extends React.Component {
@@ -97,7 +98,6 @@ class FileUploadContainer extends React.Component {
   }
 
   _onSelectSong = (newValue) => {
-    console.log("newValue:", newValue)
     if (newValue == null) {
       this.setState({
         songInput: null
@@ -122,7 +122,6 @@ class FileUploadContainer extends React.Component {
   }
 
   onCreateSong = (inputValue) => {
-    console.log("inputValue: ", inputValue)
     let albumInput = this.state.albumInput
     return this.setState({
       songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
@@ -139,9 +138,30 @@ class FileUploadContainer extends React.Component {
 
   sendToS3 = event => {
     event.preventDefault();
+
+    if (this.state.songInput.id == null) {
+      debugger
+      createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
+      .then(response => {
+        let songInputState = Object.assign({}, this.state.songInput)
+        songInputState['id'] = response.id
+        this.setState({
+          songInput: songInputState
+        })
+      })
+      .then(res => this.prepareVersionDataForS3())
+    } else {
+      return this.prepareVersionDataForS3()
+    }
+
+  }
+
+  prepareVersionDataForS3 = () => {
     let formdata = new FormData();
     formdata.append('song_id', this.state.songInput.id);
     formdata.append('file', this.state.files[0]);
+
+    console.log("formdata", formdata.get('song_id'))
 
     fetch('http://localhost:3000/api/v1/versions', {
       method: 'POST',
@@ -149,7 +169,8 @@ class FileUploadContainer extends React.Component {
     })
     .then(rez => rez.json())
     .then(j => this.clearFileOnSubmit());
-  };
+  }
+
 
   clearFileOnSubmit = () => {
     return this.setState({

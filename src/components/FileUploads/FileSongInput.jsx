@@ -21,7 +21,7 @@ const FileSongInput = ({loadSongOptions, parseSongOptions, onSelectSong, onCreat
   //
   //     />
   // )
-  console.log(parseSongOptions())
+
 
 
   return (
