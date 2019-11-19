@@ -4,24 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 
 
 const FileAlbumInput = ({loadAlbumOptions, parseAlbumOptions, onSelectAlbum, onCreateAlbum, albumInput}) => {
-  // <Select
-  //   onChange={onSelectAlbum}
-  //   name="album"
-  //   isFixed
-  //   defaultValue={albumInput()}
-  //   options={parseAlbumOptions()}
-  //   isFocused
-  //   isClearable
-  //   isSearchable
-  //   blurInputOnSelect={false}
-  //   captureMenuScroll={true}
-  //   closeMenuOnScroll={false}
-  //   closeMenuOnSelect={true}
-  //   autoFocus
-  //   controlShouldRenderValue
-  //
-  //   />
-  console.log(albumInput())
+
   return (
     <div>
       <CreatableSelect
@@ -41,8 +24,6 @@ const FileAlbumInput = ({loadAlbumOptions, parseAlbumOptions, onSelectAlbum, onC
         autoFocus
         controlShouldRenderValue
         />
-
-
     </div>
   )
 }

@@ -24,8 +24,6 @@ class FileUploadContainer extends React.Component {
 
   componentDidMount() {
     console.log("state on mount", this.state)
-    // this.parseAlbumOptions()
-
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -68,17 +66,7 @@ class FileUploadContainer extends React.Component {
       return [...songs, {value: null, label: this.state.songInput.title}]
     }
     return songs
-
   }
-
-  // handleChange = (newValue: any, actionMeta: any) => {
-  //
-  //   if (actionMeta.name == "song") {
-  //     this._onSelectSong(newValue)
-  //   } else if (actionMeta.name == "album"){
-  //     this._onSelectAlbum(newValue)
-  //   }
-  // }
 
   _onSelectAlbum = (newValue) => {
     if (newValue == null) {
@@ -150,7 +138,6 @@ class FileUploadContainer extends React.Component {
       } else {
         return this.prepareVersionDataForS3()
       }
-
     }
 
     prepareVersionDataForS3 = () => {
@@ -175,8 +162,6 @@ class FileUploadContainer extends React.Component {
         songInput: null,
         albumInput: null
       }, this.clearFileInputRef)
-
-      // }, this.renderSongInput)
     }
 
     clearFileInputRef = () => {
