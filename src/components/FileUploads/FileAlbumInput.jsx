@@ -21,12 +21,13 @@ const FileAlbumInput = ({loadAlbumOptions, parseAlbumOptions, onSelectAlbum, onC
   //   controlShouldRenderValue
   //
   //   />
+  console.log(albumInput())
   return (
     <div>
       <CreatableSelect
         onChange={onSelectAlbum}
         name="album"
-        defaultValue={albumInput()}
+        value={albumInput()}
         createOptionPosition="first"
         isFixed
         options={parseAlbumOptions()}

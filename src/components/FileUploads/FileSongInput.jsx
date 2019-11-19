@@ -3,33 +3,13 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 const FileSongInput = ({loadSongOptions, parseSongOptions, onSelectSong, onCreateSong, songInput}) => {
-
-
-  // return (
-  //   <CreatableSelect
-  //     options={parseSongOptions()}
-  //     onChange={onSelectSong}
-  //     value={defaultSong}
-  //     value
-  //     creatable
-  //     variant
-  //     isBorderless
-  //     clearable
-  //     virtualized
-  //     hasArrow
-  //     name="song"
-  //
-  //     />
-  // )
-
-
-
+  console.log(songInput())
   return (
     <div>
       <CreatableSelect
         onChange={onSelectSong}
         name="song"
-        defaultValue={songInput()}
+        value={songInput()}
         createOptionPosition="first"
         isFixed
         options={parseSongOptions()}

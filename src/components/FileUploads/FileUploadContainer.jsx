@@ -97,7 +97,7 @@ class FileUploadContainer extends React.Component {
     if (newValue == null) {
       this.setState({
         songInput: null
-      })
+      }, this.renderSongInput)
     } else {
       if (!!newValue.__isNew__) {
         this.onCreateSong(newValue)
@@ -114,7 +114,9 @@ class FileUploadContainer extends React.Component {
         this.setState({
           songInput: song
         }, this.parseAlbumOptions)
-      }}
+        this.renderSongInput()
+      }
+      }
     }
 
     onCreateSong = (inputValue) => {
@@ -167,7 +169,7 @@ class FileUploadContainer extends React.Component {
 
     clearMetadataOnSubmit = () => {
 
-      return this.setState({
+      this.setState({
         files: [],
         preview: null,
         songInput: null,
@@ -179,19 +181,22 @@ class FileUploadContainer extends React.Component {
 
     clearFileInputRef = () => {
       this.fileInput.current.value = ""
+      this.renderAlbumInput()
+      this.renderSongInput()
     }
 
 
     renderAlbumInput = () => {
       return !!this.state.albumInput ? (
-        {value: this.state.albumInput.id, label: this.state.albumInput.title}
+         {value: this.state.albumInput.id, label: this.state.albumInput.title}
       ) : (
-        null
+         null
       )
 
     }
 
     renderSongInput = () => {
+
       return !!this.state.songInput ? (
         {value: this.state.songInput.id, label: this.state.songInput.title}
       ) : (
