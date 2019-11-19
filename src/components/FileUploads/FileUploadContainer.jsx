@@ -23,47 +23,43 @@ class FileUploadContainer extends React.Component {
   }
 
   componentDidMount() {
-     // this.parseAlbumOptions()
+    console.log("state on mount", this.state)
+    // this.parseAlbumOptions()
 
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.albumInput == this.state.albumInput) {
+    if (this.state.albumInput == null && prevState.albumInput != null) {
       this.renderAlbumInput()
-      this.renderSongInput()
       this.parseAlbumOptions()
-      this.parseSongOptions()
     }
 
-    if (prevState.songInput == this.state.songInput) {
-      this.renderAlbumInput()
-
+    if (this.state.songInput == null && prevState.songInput != null) {
       this.renderSongInput()
-      this.parseAlbumOptions()
       this.parseSongOptions()
     }
   }
 
   parseAlbumOptions = () => {
-      if (this.state.songInput != null) {
-        let album = this.props.albumData.find((album) => album.id == this.state.songInput.album_id )
+    if (this.state.songInput != null) {
+      let album = this.props.albumData.find((album) => album.id == this.state.songInput.album_id )
+      return {value: album.id, label: album.title}
+    } else {
+      return this.props.albumData.map((album) => {
         return {value: album.id, label: album.title}
-      } else {
-        return this.props.albumData.map((album) => {
-          return {value: album.id, label: album.title}
-        })
-      }
+      })
+    }
   }
 
   parseSongOptions = () => {
     let songs
     this.state.albumInput != null ? (
-       songs = this.props.songData.filter((song) => song.album_id == this.state.albumInput.id)
+      songs = this.props.songData.filter((song) => song.album_id == this.state.albumInput.id)
       .map((s) => {
         return { value: s.id, label: s.title }
       })
     ) : (
-       songs = this.props.songData.map((song) => {
+      songs = this.props.songData.map((song) => {
         return { value: song.id, label: song.title }
       })
     )
@@ -115,119 +111,126 @@ class FileUploadContainer extends React.Component {
         }, this.renderSongInput)
       } else {
         let song = this.props.songData.find((song) => song.id == newValue.value)
-         this.setState({
+        this.setState({
           songInput: song
         }, this.parseAlbumOptions)
-    }}
-  }
-
-  onCreateSong = (inputValue) => {
-    let albumInput = this.state.albumInput
-    return this.setState({
-      songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
-    }, this.parseSongOptions)
-  }
-
-  _onAddFileData = event => {
-    this.setState({
-      files: [...this.fileInput.current.files],
-      preview: URL.createObjectURL(event.target.files[0]),
-    })
-  }
-
-
-  sendToS3 = event => {
-    event.preventDefault();
-
-    if (this.state.songInput.id == null) {
-      debugger
-      createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
-      .then(response => {
-        let songInputState = Object.assign({}, this.state.songInput)
-        songInputState['id'] = response.id
-        this.setState({
-          songInput: songInputState
-        })
-      })
-      .then(res => this.prepareVersionDataForS3())
-    } else {
-      return this.prepareVersionDataForS3()
+      }}
     }
 
-  }
+    onCreateSong = (inputValue) => {
+      let albumInput = this.state.albumInput
+      return this.setState({
+        songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
+      }, this.parseSongOptions)
+    }
 
-  prepareVersionDataForS3 = () => {
-    let formdata = new FormData();
-    formdata.append('song_id', this.state.songInput.id);
-    formdata.append('file', this.state.files[0]);
-
-    console.log("formdata", formdata.get('song_id'))
-
-    fetch('http://localhost:3000/api/v1/versions', {
-      method: 'POST',
-      body: formdata,
-    })
-    .then(rez => rez.json())
-    .then(j => this.clearFileOnSubmit());
-  }
+    _onAddFileData = event => {
+      this.setState({
+        files: [...this.fileInput.current.files],
+        preview: URL.createObjectURL(event.target.files[0]),
+      })
+    }
 
 
-  clearFileOnSubmit = () => {
-    return this.setState({
-      files: [],
-      preview: null
-    })
-  }
+    sendToS3 = event => {
+      event.preventDefault();
 
-  renderAlbumInput = () => {
-    return !!this.state.albumInput ? (
-       {value: this.state.albumInput.id, label: this.state.albumInput.title}
-    ) : (
-       null
-    )
+      if (this.state.songInput.id == null) {
+        createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
+        .then(response => {
+          let songInputState = Object.assign({}, this.state.songInput)
+          songInputState['id'] = response.id
+          this.setState({
+            songInput: songInputState
+          })
+        })
+        .then(res => this.prepareVersionDataForS3())
+      } else {
+        return this.prepareVersionDataForS3()
+      }
 
-  }
+    }
 
-  renderSongInput = () => {
-    return !!this.state.songInput ? (
-       {value: this.state.songInput.id, label: this.state.songInput.title}
-    ) : (
-       null
-    )
-  }
+    prepareVersionDataForS3 = () => {
+      let formdata = new FormData();
+      formdata.append('song_id', this.state.songInput.id);
+      formdata.append('file', this.state.files[0]);
 
-  renderPreview = () => {
-    return (
-      <FileUploadPreview preview = {this.state.preview} />
+      fetch('http://localhost:3000/api/v1/versions', {
+        method: 'POST',
+        body: formdata,
+      })
+      .then(rez => rez.json())
+      .then(j => this.clearMetadataOnSubmit());
+    }
+
+
+    clearMetadataOnSubmit = () => {
+
+      return this.setState({
+        files: [],
+        preview: null,
+        songInput: null,
+        albumInput: null
+      }, this.clearFileInputRef)
+
+      // }, this.renderSongInput)
+    }
+
+    clearFileInputRef = () => {
+      this.fileInput.current.value = ""
+    }
+
+
+    renderAlbumInput = () => {
+      return !!this.state.albumInput ? (
+        {value: this.state.albumInput.id, label: this.state.albumInput.title}
+      ) : (
+        null
+      )
+
+    }
+
+    renderSongInput = () => {
+      return !!this.state.songInput ? (
+        {value: this.state.songInput.id, label: this.state.songInput.title}
+      ) : (
+        null
+      )
+    }
+
+    renderPreview = () => {
+      return (
+        <FileUploadPreview preview = {this.state.preview} />
       )
     }
 
     render() {
 
-        return (
-          <div>
-            {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 &&
+      return (
+        <div>
+          {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 &&
 
-              <div>
-                <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
+            <div>
+              <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
 
-                <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+              <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
 
-                <hr />
+              <hr />
 
-                <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
+              <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
 
-              </div>
-            }
+            </div>
+          }
 
-            {!!this.state.preview &&
-              <div>
-                <h5>Upload Preview</h5>
-                {this.renderPreview()}
-              </div>
-            }
-          </div>
-        )
+          {!!this.state.preview &&
+            <div>
+              <h5>Upload Preview</h5>
+              {this.renderPreview()}
+            </div>
+          }
+        </div>
+      )
 
     }
   }
