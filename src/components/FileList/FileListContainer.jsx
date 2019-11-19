@@ -1,4 +1,5 @@
 import React from 'react'
+import AlbumListItem from './AlbumListItem'
 import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
 
@@ -14,6 +15,7 @@ class FileListContainer extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props)
     this.setState({
       view: null,
       files: {}
@@ -24,7 +26,7 @@ class FileListContainer extends React.Component {
   getSignedUrl = () => {
 
   }
-  // 
+  //
   // fetchSongData = () => {
   //   fetch("http://localhost:3000/api/v1/albums")
   //   .then(results => results.json())
@@ -36,34 +38,16 @@ class FileListContainer extends React.Component {
   //   })
   // }
 
-  selectViewOption = (event) => {
-    let value = event.target.value
-    this.setState({
-      view: value
-    })
+  render() {
+    console.log(this.props.songData)
+    return (
+      <div>
+        {this.props.albumData.map((album) => {
+          return <AlbumListItem album={album} songList = {this.props.songData.filter((song) => song.album_id == album.id)}/>
+        })}
+      </div>
+    )
   }
-
-  render(){
-    if (this.state.view == "audio") {
-      return (
-        <SongListDataWithAudio songListData={this.props.songListData} songFiles={this.state.songFiles} selectViewOption={this.selectViewOption} />
-        )
-
-      // eslint-disable-next-line eqeqeq
-      } else if (this.state.view == "data") {
-         return (
-         <SongListData songListData={this.props.songListData} selectViewOption={this.selectViewOption} />
-         )
-      } else {
-        return (
-        <div>
-          <h2>Pick a View</h2>
-          <button onClick={this.selectViewOption} value="data">Song List</button>
-          <button onClick={this.selectViewOption} value="audio">Song List with Audio</button>
-        </div>
-        )
-        }
-    }
 
 }
 

@@ -1,4 +1,6 @@
 import React, { useCallback } from 'react';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+
 import logo from './logo.svg';
 import './App.css';
 import {fetchAlbums, fetchSongs} from './service'
@@ -10,8 +12,8 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			view: null,
-			albumData: [],
-			songData: [],
+			albumData: null,
+			songData: null,
 			_legacyMusicData: []
 		};
 
@@ -53,27 +55,29 @@ class App extends React.Component {
 
 
 	render() {
-		return (
-			<div>
-				{this.state.view !== "upload" ? (
-					<div>
-						<button onClick={this.switchView} value="upload">Switch View: Upload</button>
-						<FileListContainer songListData={this.state._legacyMusicData || []}/>
-					</div>
-
-				) : (
-
+		if (!this.state.albumData || !this.state.songData) {
+			return (
 				<div>
-						<button value="files" onClick={this.switchView}>Switch View: Song List </button>
+					loading...
+				</div>
+			)
+		} else {
+			return (
+				<div>
+					<Switch>
+						<Route exact path="/admin/upload" render={(routerProps) => {
+								return <FileUploadContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+							}} />
 
-				<FileUploadContainer albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+						<Route exact path="/admin/manage" render={(routerProps) => {
+								return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+							}} />
 
+					</Switch>
 				</div>
 			)
 		}
-	</div>
-	)
-}
+	}
 	}
 
 		export default App;
