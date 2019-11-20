@@ -14,7 +14,9 @@ class FileUploadContainer extends React.Component {
       files: [],
       preview: null,
       albumInput: null,
-      songInput: null
+      songInput: null,
+      descriptionInput: null,
+      dateInput: null
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
@@ -150,8 +152,16 @@ class FileUploadContainer extends React.Component {
         body: formdata,
       })
       .then(rez => rez.json())
-      .then(j => this.clearMetadataOnSubmit());
+      .then(j => {
+        console.log("j", j)
+        return this.clearMetadataOnSubmit()
+      });
     }
+
+    // after prepareVersionDataForS3 => check song created successfully (error check)
+    // if yes =>render version record
+    // else: render message indicating as much
+    // THEN clearMetadataOnSubmit
 
 
     clearMetadataOnSubmit = () => {
