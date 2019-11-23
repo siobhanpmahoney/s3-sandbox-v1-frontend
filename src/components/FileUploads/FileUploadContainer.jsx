@@ -4,6 +4,7 @@ import FileUploadForm from './FileUploadForm'
 import FileAlbumInput from './FileAlbumInput'
 import FileSongInput from './FileSongInput'
 import FileDateInput from './FileDateInput'
+import FileDescriptionInput from './FileDescriptionInput'
 import { createSong } from '../../service'
 
 
@@ -16,8 +17,8 @@ class FileUploadContainer extends React.Component {
       preview: null,
       albumInput: null,
       songInput: null,
-      descriptionInput: null,
-      dateInput: ""
+      descriptionInput: "",
+      dateInput: undefined
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
@@ -139,6 +140,12 @@ class FileUploadContainer extends React.Component {
 
     }
 
+    onAddFileDescription = (event) => {
+      this.setState({
+        descriptionInput: event.target.value
+      })
+    }
+
 
     sendToS3 = event => {
       event.preventDefault();
@@ -162,6 +169,7 @@ class FileUploadContainer extends React.Component {
       let formdata = new FormData();
       formdata.append('song_id', this.state.songInput.id);
       formdata.append('date', this.state.dateInput)
+      formdata.append('description', this.state.descriptionInput)
       formdata.append('file', this.state.files[0]);
 
       fetch('http://localhost:3000/api/v1/versions', {
@@ -188,7 +196,8 @@ class FileUploadContainer extends React.Component {
         preview: null,
         songInput: null,
         albumInput: null,
-        dateInput: undefined
+        dateInput: undefined,
+        descriptionInput: ""
       }, this.clearFileInputRef)
     }
 
@@ -226,6 +235,14 @@ class FileUploadContainer extends React.Component {
       )
     }
 
+    renderDescriptionInput = () => {
+      return !!this.state.descriptionInput ? (
+        this.state.descriptionInput
+      ) : (
+        null
+      )
+    }
+
     renderPreview = () => {
       return (
         <FileUploadPreview preview = {this.state.preview} />
@@ -243,6 +260,8 @@ class FileUploadContainer extends React.Component {
               <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
 
               <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
+
+            <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
 
               <hr />
 
