@@ -3,6 +3,7 @@ import FileUploadPreview from './FileUploadPreview'
 import FileUploadForm from './FileUploadForm'
 import FileAlbumInput from './FileAlbumInput'
 import FileSongInput from './FileSongInput'
+import FileDateInput from './FileDateInput'
 import { createSong } from '../../service'
 
 
@@ -16,7 +17,7 @@ class FileUploadContainer extends React.Component {
       albumInput: null,
       songInput: null,
       descriptionInput: null,
-      dateInput: null
+      dateInput: ""
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
@@ -37,6 +38,10 @@ class FileUploadContainer extends React.Component {
     if (this.state.songInput == null && prevState.songInput != null) {
       this.renderSongInput()
       this.parseSongOptions()
+    }
+
+    if (this.state.dateInput != prevState.dateInput) {
+      this.renderDateInput()
     }
   }
 
@@ -123,6 +128,17 @@ class FileUploadContainer extends React.Component {
       })
     }
 
+    onAddFileDate = (day) => {
+      return !!day ? (
+        this.setState({
+          dateInput: day.toString()
+        })
+      ) : (
+        null
+      )
+
+    }
+
 
     sendToS3 = event => {
       event.preventDefault();
@@ -145,6 +161,7 @@ class FileUploadContainer extends React.Component {
     prepareVersionDataForS3 = () => {
       let formdata = new FormData();
       formdata.append('song_id', this.state.songInput.id);
+      formdata.append('date', this.state.dateInput)
       formdata.append('file', this.state.files[0]);
 
       fetch('http://localhost:3000/api/v1/versions', {
@@ -170,7 +187,8 @@ class FileUploadContainer extends React.Component {
         files: [],
         preview: null,
         songInput: null,
-        albumInput: null
+        albumInput: null,
+        dateInput: undefined
       }, this.clearFileInputRef)
     }
 
@@ -178,6 +196,7 @@ class FileUploadContainer extends React.Component {
       this.fileInput.current.value = ""
       this.renderAlbumInput()
       this.renderSongInput()
+      this.renderDateInput()
     }
 
 
@@ -199,6 +218,14 @@ class FileUploadContainer extends React.Component {
       )
     }
 
+    renderDateInput = () => {
+      return !!this.state.dateInput ? (
+        this.state.dateInput
+      ) : (
+        null
+      )
+    }
+
     renderPreview = () => {
       return (
         <FileUploadPreview preview = {this.state.preview} />
@@ -206,7 +233,6 @@ class FileUploadContainer extends React.Component {
     }
 
     render() {
-
       return (
         <div>
           {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 &&
@@ -215,6 +241,8 @@ class FileUploadContainer extends React.Component {
               <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
 
               <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+
+              <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
 
               <hr />
 
