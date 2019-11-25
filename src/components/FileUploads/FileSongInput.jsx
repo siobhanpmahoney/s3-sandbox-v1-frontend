@@ -5,9 +5,11 @@ import CreatableSelect from 'react-select/creatable';
 const FileSongInput = ({loadSongOptions, parseSongOptions, onSelectSong, onCreateSong, songInput}) => {
   console.log(songInput())
   return (
-    <div>
+    <div className="file-song-input-container">
       <CreatableSelect
         onChange={onSelectSong}
+        className="react-select-container"
+        classNamePrefix="react-select"
         name="song"
         value={songInput()}
         createOptionPosition="first"

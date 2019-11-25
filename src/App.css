@@ -20,3 +20,127 @@
 .App-link {
   color: #09d3ac;
 }
+
+.app {
+  margin: 8px;
+  padding: 14px;
+}
+
+.file-upload-container {
+  height: 100%;
+  width: 100%;
+}
+
+.file-upload-info-container {
+  width: 100%;
+}
+
+.file-upload-metadata-section {
+  width: 100%;
+  display: flex;
+  align-content: center;
+}
+
+.file-upload-album-and-song-section, .file-upload-version-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-content:space-around;
+  align-self: center;
+  align-items: center;
+}
+
+.file-album-input-container, .file-song-input-container {
+  width: 75%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 12px;
+
+}
+
+.react-select__value-container {
+  padding: 3px;
+  font-size: 95%;
+}
+
+#loader-wrapper {
+  margin-top: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3.5px solid transparent;
+  border-top-color: #274cc6;
+  border-bottom-color: #274cc6;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3.5px solid transparent;
+  border-top-color: #35a8e5;
+  border-bottom-color: #35a8e5;
+  -webkit-animation: spin 4.5s linear infinite;
+  animation: spin 4.5s linear infinite;
+}
+
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 100%;
+  border: 3.5px solid transparent;
+  border-top-color: #00ddb7;
+  border-bottom-color: #00ddb7;
+  -webkit-animation: spin 2.25s linear infinite;
+  animation: spin 2.25s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0%   {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0%   {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

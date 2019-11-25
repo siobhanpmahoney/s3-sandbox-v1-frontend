@@ -5,7 +5,10 @@ import FileAlbumInput from './FileAlbumInput'
 import FileSongInput from './FileSongInput'
 import FileDateInput from './FileDateInput'
 import FileDescriptionInput from './FileDescriptionInput'
+import FileUploadConfirmation from './FileUploadConfirmation'
 import { createSong } from '../../service'
+import Loader from '../utils/Loader'
+
 
 
 class FileUploadContainer extends React.Component {
@@ -18,7 +21,10 @@ class FileUploadContainer extends React.Component {
       albumInput: null,
       songInput: null,
       descriptionInput: "",
-      dateInput: undefined
+      dateInput: undefined,
+      isLoading: false,
+      confirmedUploadedFile: null,
+      isRenderingFileUploadConfirmation: false
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
@@ -176,11 +182,32 @@ class FileUploadContainer extends React.Component {
         method: 'POST',
         body: formdata,
       })
-      .then(rez => rez.json())
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return alert("error")
+        }
+      })
       .then(j => {
         console.log("j", j)
+        this.setState({
+          confirmedUploadedFile: j
+        }, this.onToggleFileUploadConfirmation)
         return this.clearMetadataOnSubmit()
-      });
+        // return this.clearMetadataOnSubmit()
+      })
+      // .then(rez => rez.json())
+      // .then(j => {
+      //   console.log("j", j)
+      //   return this.clearMetadataOnSubmit()
+      // })
+    }
+
+    onToggleFileUploadConfirmation = () => {
+      this.setState({
+        isRenderingFileUploadConfirmation: !this.state.isRenderingFileUploadConfirmation
+      })
     }
 
     // after prepareVersionDataForS3 => check song created successfully (error check)
@@ -249,25 +276,47 @@ class FileUploadContainer extends React.Component {
       )
     }
 
+    renderFileUploadConfirmation = () => {
+      return (
+        <FileUploadConfirmation file={this.state.confirmedUploadedFile} />
+      )
+    }
+
     render() {
       return (
-        <div>
-          {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 &&
+        <div className="file-upload-container">
+          {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 ? (
 
-            <div>
-              <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
+            <div className="file-upload-info-container">
+              <div className="file-upload-metadata-section">
+                <div className="file-upload-album-and-song-section">
+                  <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
 
-              <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+                  <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+                </div>
 
-              <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
+                <div className="file-upload-version-section">
+                  <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
 
-            <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
+                  <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
+                </div>
+
+
+
+
+              </div>
+
 
               <hr />
 
               <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
 
             </div>
+          ) : (
+            <div>
+              <Loader />
+            </div>
+          )
           }
 
           {!!this.state.preview &&
@@ -275,6 +324,13 @@ class FileUploadContainer extends React.Component {
               <h5>Upload Preview</h5>
               {this.renderPreview()}
             </div>
+          }
+
+          {!!this.state.isRenderingFileUploadConfirmation &&
+            <div>
+              {this.renderFileUploadConfirmation()}
+            </div>
+
           }
         </div>
       )

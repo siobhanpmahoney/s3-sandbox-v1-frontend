@@ -7,6 +7,8 @@ import {fetchAlbums, fetchSongs} from './service'
 import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
 
+import Loader from './components/utils/Loader'
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -57,13 +59,13 @@ class App extends React.Component {
 	render() {
 		if (!this.state.albumData || !this.state.songData) {
 			return (
-				<div>
-					loading...
+				<div className="app">
+					<Loader />
 				</div>
 			)
 		} else {
 			return (
-				<div>
+				<div className="app">
 					<Switch>
 						<Route exact path="/admin/upload" render={(routerProps) => {
 								return <FileUploadContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
@@ -72,6 +74,11 @@ class App extends React.Component {
 						<Route exact path="/admin/manage" render={(routerProps) => {
 								return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
 							}} />
+
+						<Route exact path="/app" render={(routerProps) => {
+									return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+								}} />
+
 
 					</Switch>
 				</div>
