@@ -299,6 +299,12 @@ class FileUploadContainer extends React.Component {
           {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 ? (
 
             <div className="file-upload-info-container">
+              {!!this.state.isRenderingFileUploadConfirmation &&
+                <div className="file-upload-confirmation-component">
+                  {this.renderFileUploadConfirmation()}
+                </div>
+
+              }
               <div className="file-upload-metadata-section">
                 <div className="file-upload-album-and-song-section">
                   <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
@@ -337,12 +343,7 @@ class FileUploadContainer extends React.Component {
             </div>
           }
 
-          {!!this.state.isRenderingFileUploadConfirmation &&
-            <div>
-              {this.renderFileUploadConfirmation()}
-            </div>
 
-          }
         </div>
       )
 
