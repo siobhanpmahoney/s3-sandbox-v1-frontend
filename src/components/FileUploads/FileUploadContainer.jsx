@@ -235,6 +235,12 @@ class FileUploadContainer extends React.Component {
       this.renderDateInput()
     }
 
+    clearUploadConfirmation = () => {
+      this.setState({
+        confirmedUploadedFile: null
+      }, this.onToggleFileUploadConfirmation)
+    }
+
 
     renderAlbumInput = () => {
       return !!this.state.albumInput ? (
@@ -277,9 +283,14 @@ class FileUploadContainer extends React.Component {
     }
 
     renderFileUploadConfirmation = () => {
-      return (
-        <FileUploadConfirmation file={this.state.confirmedUploadedFile} />
-      )
+      if (!!this.state.confirmedUploadedFile) {
+        return (
+          <FileUploadConfirmation file={this.state.confirmedUploadedFile} clearUploadConfirmation={this.clearUploadConfirmation}/>
+        )
+      } else {
+        return;
+      }
+
     }
 
     render() {

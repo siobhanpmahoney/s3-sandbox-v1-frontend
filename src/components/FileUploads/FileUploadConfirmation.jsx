@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FileUploadConfirmation = ({file}) => {
+const FileUploadConfirmation = ({file, clearUploadConfirmation}) => {
   return (
     <div className="file-upload-confirmation-container">
       <div className="file-upload-confirmation-line header">
@@ -10,7 +10,7 @@ const FileUploadConfirmation = ({file}) => {
       </div>
 
       <div className="file-upload-confirmation-options">
-        <button className="file-upload-confirmation-close">ok</button>
+        <button className="file-upload-confirmation-close" onClick={clearUploadConfirmation}>ok</button>
       </div>
     </div>
   )
