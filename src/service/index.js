@@ -1,3 +1,5 @@
+import {s3sandbox} from '../assets/keys'
+
 const API_ROOT = 'http://localhost:3000/api/v1'
 
 const HEADERS = { 'Content-Type': 'application/json', 'Accepts': 'application/json' }
@@ -19,4 +21,9 @@ export const createSong = (songParams) => {
     body: JSON.stringify({song: songParams})
   })
   .then(response => response.json())
+}
+
+export const getSignedUrl = (s3key) => {
+  return fetch(`http://localhost:3000/api/v1/s3?bucket=${s3sandbox}&key=${s3key}`)
+    .then(response => response.json())
 }

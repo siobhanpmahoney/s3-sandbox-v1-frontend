@@ -5,7 +5,7 @@ const VersionListContainer = ({versions}) => {
   return (
     <div>
       {versions.map((version) => {
-        return <VersionItemContainer version={version} />
+        return <VersionItemContainer version={version} key={version.id} />
       })}
     </div>
   )
