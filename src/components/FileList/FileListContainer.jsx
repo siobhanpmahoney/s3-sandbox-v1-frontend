@@ -4,29 +4,27 @@ import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
 
 class FileListContainer extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      view: null, // choices: Song List // Song List with Audio
-      songListData: [], // schema:
-      songFiles: {}
-    }
-  }
-
-  componentDidMount() {
-    console.log(this.props)
-    this.setState({
-      view: null,
-      files: {}
-    })
-    // this.fetchSongData
-  }
-
-  getSignedUrl = () => {
-
-  }
+  // constructor(props) {
+  //   super(props)
   //
+  //   this.state = {
+  //     view: null, // choices: Song List // Song List with Audio
+  //     songListData: [], // schema:
+  //   }
+  // }
+  //
+  // componentDidMount() {
+  //   console.log(this.props)
+  //   this.setState({
+  //     view: null,
+  //     files: {},
+  //   }, this.fetchSongData)
+  // }
+  //
+  // getSignedUrl = () => {
+  //
+  // }
+  // //
   // fetchSongData = () => {
   //   fetch("http://localhost:3000/api/v1/albums")
   //   .then(results => results.json())
@@ -36,14 +34,14 @@ class FileListContainer extends React.Component {
   //       songListData: json
   //     })
   //   })
+  //   console.log(this.props)
   // }
 
   render() {
-    console.log(this.props.songData)
     return (
       <div>
         {this.props.albumData.map((album) => {
-          return <AlbumListItem album={album} songList = {this.props.songData.filter((song) => song.album_id == album.id)}/>
+          return <AlbumListItem album={album} songList = {album.songs}/>
         })}
       </div>
     )
