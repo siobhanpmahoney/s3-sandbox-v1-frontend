@@ -33,7 +33,7 @@ class FileUploadContainer extends React.Component {
   }
 
   componentDidMount() {
-    console.log("state on mount", this.state)
+    console.log("state on mount", this.props)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -285,7 +285,7 @@ class FileUploadContainer extends React.Component {
     renderFileUploadConfirmation = () => {
       if (!!this.state.confirmedUploadedFile) {
         return (
-          <FileUploadConfirmation file={this.state.confirmedUploadedFile} clearUploadConfirmation={this.clearUploadConfirmation}/>
+          <FileUploadConfirmation file={this.state.confirmedUploadedFile} album={this.props.albumData.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
         )
       } else {
         return;

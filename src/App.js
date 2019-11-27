@@ -3,10 +3,10 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import logo from './logo.svg';
 import './App.css';
-import {fetchAlbums, fetchSongs} from './service'
+import NavBar from './components/NavBar/NavBar'
 import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
-
+import {fetchAlbums, fetchSongs} from './service'
 import Loader from './components/utils/Loader'
 
 class App extends React.Component {
@@ -66,6 +66,7 @@ class App extends React.Component {
 		} else {
 			return (
 				<div className="app">
+					<NavBar />
 					<Switch>
 						<Route exact path="/admin/upload" render={(routerProps) => {
 								return <FileUploadContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
