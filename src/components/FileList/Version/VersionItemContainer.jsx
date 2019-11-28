@@ -9,24 +9,55 @@ class VersionItemContainer extends React.Component {
 
     this.state = {
       isDisplayingAudio: false,
-      signedUrl: null
+      signedUrl: null,
+      audioReady: false
     }
   }
 
-  componentDidMount() {
-    this.getSignedUrl()
-  }
 
-  getSignedUrl = () => {
 
-    getSignedUrl(this.props.version.s3_key)
-    .then(res => console.log(res))
-  }
 
   toggleAudioDisplay = () => {
     this.setState({
       isDisplayingAudio: !this.state.isDisplayingAudio
-    })
+    }, this.getSignedUrl)
+  }
+
+  getSignedUrl = () => {
+    if (!this.state.signedUrl) {
+      getSignedUrl(encodeURI(this.props.version.s3_key))
+      .then(res => this.setState({
+        signedUrl: res.url,
+      }, this.toggleAudioReady)
+    )
+    } else {
+      this.setState({
+        audioReady: !this.state.audioReady
+      })
+    }
+
+  }
+
+  toggleAudioReady = () => {
+    console.log(this.state.signedUrl)
+    this.setState({
+      audioReady: !this.state.audioReady
+    }, this.renderAudio)
+  }
+
+  renderAudio = () => {
+    return !!this.state.audioReady ? (
+      <React.Fragment>
+        <div>
+          {this.state.signedUrl}
+        </div>
+
+
+      <VersionItemAudio version={this.props.version} signedUrl={this.state.signedUrl}/>
+      </React.Fragment>
+    ) : (
+      <button onClick={this.toggleAudioDisplay}>show audio</button>
+    )
   }
 
   render() {
@@ -35,11 +66,9 @@ class VersionItemContainer extends React.Component {
         <div className="version-item-container-header"></div>
         <VersionItemMetadata version={this.props.version} />
 
-        {!!this.state.isDisplayingAudio ? (
-          <VersionItemAudio version={this.props.version} />
-        ) : (
-          <button onClick={this.toggleAudioDisplay}>show audio</button>
-        )}
+       {this.renderAudio()}
+
+
 
       </div>
     )

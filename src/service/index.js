@@ -24,6 +24,6 @@ export const createSong = (songParams) => {
 }
 
 export const getSignedUrl = (s3key) => {
-  return fetch(`http://localhost:3000/api/v1/s3?bucket=${s3sandbox}&key=${s3key}`)
+  return fetch(`http://localhost:3000/api/v1/s3/signed_url?bucket=${s3sandbox}&key=${s3key}`)
     .then(response => response.json())
 }

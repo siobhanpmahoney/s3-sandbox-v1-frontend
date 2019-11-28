@@ -1,13 +1,17 @@
 import React from 'react'
+import Loader from '../../utils/Loader'
 
-const VersionitemAudio = ({version}) => {
-  console.log(`https://sandbox-v3.s3.amazonaws.com/${version.s3_key}`)
-  return (
-    <div>
-      <audio controls>
-        <source src={`https://sandbox-v3.s3.amazonaws.com/${version.s3_key}`} type="audio/x-m4a" / >
-      </audio>
-    </div>
+const VersionitemAudio = ({version, signedUrl}) => {
+  return (!signedUrl ? (
+      <Loader />
+
+    ) : (
+      <div>
+        <audio controls>
+          <source src={signedUrl} type="audio/x-m4a" / >
+        </audio>
+      </div>
+    )
   )
 }
 
