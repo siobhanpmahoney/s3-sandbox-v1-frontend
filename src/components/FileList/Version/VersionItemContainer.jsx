@@ -47,14 +47,7 @@ class VersionItemContainer extends React.Component {
 
   renderAudio = () => {
     return !!this.state.audioReady ? (
-      <React.Fragment>
-        <div>
-          {this.state.signedUrl}
-        </div>
-
-
       <VersionItemAudio version={this.props.version} signedUrl={this.state.signedUrl}/>
-      </React.Fragment>
     ) : (
       <button onClick={this.toggleAudioDisplay}>show audio</button>
     )
