@@ -1333,6 +1333,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@kunukn/react-collapse@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@kunukn/react-collapse/-/react-collapse-2.2.7.tgz#c5d4918527790712b87aadab356dad96a008c59b"
+  integrity sha512-uivLucYMANDbo9Kta1KCb/LLH7o9iybUiUcVt2YLIKLqdFd2slt1FLN267lafeV1QB+W5X0jjRav0rmgPzV1vg==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

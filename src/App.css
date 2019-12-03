@@ -81,6 +81,10 @@
 .version-item-container-header {
 }
 
+.album-list-item-wrapper {
+  text-align: left;
+}
+
 .album-list-item-heading {
   color: #808080;
   font-size: 16px;
@@ -106,6 +110,7 @@
   padding: 16px 0px;
   color: #03363D;
 }
+
 
 #loader-wrapper {
   margin-top: 100px;

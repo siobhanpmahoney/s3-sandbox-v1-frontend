@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@kunukn/react-collapse": "^2.2.7",
     "activestorage": "^5.2.3",
     "aws-amplify": "^1.1.40",
     "camaro": "^4.1.0",
