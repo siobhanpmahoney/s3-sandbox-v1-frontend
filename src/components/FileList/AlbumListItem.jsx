@@ -29,17 +29,18 @@ class AlbumListItem extends React.Component {
   }
 
   render() {
-    const duration = "290ms"
+    const duration = "300ms"
     return (
       <div className="album-list-item-component">
+        <button className="album-list-item-wrapper" onClick={this.onToggleOpen}>
+          <div className="album-list-item-heading">
+            {this.props.album.title}
+          </div>
+        </button>
+          <Collapse transition={`height ${duration} cubic-bezier(0.4, 0, 0.2, 1)`} isOpen={this.state.isOpen} >
+            <SongListContainer songs={this.props.songList} />
+          </Collapse>
 
-
-<button className="album-list-item-wrapper" onClick={this.onToggleOpen}>
-  <div className="album-list-item-heading">{this.props.album.title}</div>
-      <Collapse transition={`height ${duration} cubic-bezier(.4, 0, .2, 1)`} isOpen={this.state.isOpen} >
-        <SongListContainer songs={this.props.songList} />
-      </Collapse>
-</button>
 
       </div>
     )

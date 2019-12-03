@@ -81,8 +81,13 @@
 .version-item-container-header {
 }
 
-.album-list-item-wrapper {
+.album-list-item-component {
+  width: 100%;
+}
+
+.album-list-item-wrapper, .song-list-item-wrapper {
   text-align: left;
+  width: 100%;
 }
 
 .album-list-item-heading {
@@ -96,12 +101,12 @@
   background-color: #fafafa;
   box-sizing: border-box;
   border: solid 1px #939393;
-  margin: 4px;
+  margin: 4px 0px;
 }
 
 .song-list-item-container {
-  padding: 12px;
-  margin: 5px;
+  padding: 12px 0px;
+  margin: 5px 0px;
 }
 
 .song-list-item-heading {
