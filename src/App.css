@@ -88,8 +88,16 @@
   text-transform: uppercase;
 }
 
-.song-list-item-container {
+.song-list-item-component {
+  background-color: #fafafa;
+  box-sizing: border-box;
+  border: solid 1px #939393;
+  margin: 4px;
+}
 
+.song-list-item-container {
+  padding: 12px;
+  margin: 5px;
 }
 
 .song-list-item-heading {
