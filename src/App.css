@@ -67,6 +67,7 @@
 
 .file-upload-confirmation-component {
   padding: 12px;
+
 }
 
 .file-upload-confirmation-container {
@@ -75,6 +76,27 @@
 
 .file-upload-confirmation-section > * {
   padding: 3px;
+}
+
+.version-item-container-header {
+}
+
+.album-list-item-heading {
+  color: #808080;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.song-list-item-container {
+
+}
+
+.song-list-item-heading {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 16px 0px;
+  color: #03363D;
 }
 
 #loader-wrapper {

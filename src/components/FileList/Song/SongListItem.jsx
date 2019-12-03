@@ -5,7 +5,7 @@ class SongListItem extends React.Component {
   render() {
     return (
       <div className="song-list-item-container">
-        <div className="song-list-item-title header">
+        <div className="song-list-item-heading">
           {this.props.song.title}
         </div>
 
