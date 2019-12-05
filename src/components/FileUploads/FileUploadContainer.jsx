@@ -285,7 +285,7 @@ class FileUploadContainer extends React.Component {
     renderFileUploadConfirmation = () => {
       if (!!this.state.confirmedUploadedFile) {
         return (
-          <FileUploadConfirmation file={this.state.confirmedUploadedFile} album={this.props.albumData.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
+          <FileUploadConfirmation version={this.state.confirmedUploadedFile} album={this.props.albumData.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
         )
       } else {
         return;

@@ -71,7 +71,9 @@
 }
 
 .file-upload-confirmation-container {
-  padding: 3px;
+  padding: 16px 0px;
+  border: #30AABC 3px solid;
+  margin: 4px 0px; 
 }
 
 .file-upload-confirmation-section > * {

@@ -1,6 +1,7 @@
 import React from 'react'
+import VersionItemContainer from '../FileList/Version/VersionItemContainer'
 
-const FileUploadConfirmation = ({file, clearUploadConfirmation}) => {
+const FileUploadConfirmation = ({version, clearUploadConfirmation, album}) => {
   return (
     <div className="file-upload-confirmation-container">
       <div className="file-upload-confirmation-section header">
@@ -11,23 +12,20 @@ const FileUploadConfirmation = ({file, clearUploadConfirmation}) => {
 
       <div className="file-upload-confirmation-section details">
         <div className="file-upload-confirmation-section details-album">
-          <span className="metadata-label">
-            Album:
-          </span>
 
-          <span className="metadata-value">
-
-          </span>
+          <div className="album-list-item-heading">
+            {album.title}
+          </div>
         </div>
 
         <div className="file-upload-confirmation-section details-song">
-          <span className="metadata-label">
-            Song:
-          </span>
-          <span className="metadata-value">
-            {file.song.title}
-          </span>
+          <div className="song-list-item-heading">
+            {version.song.title}
+          </div>
+
         </div>
+
+        <VersionItemContainer version={version} id={version.id} />
 
       </div>
 
