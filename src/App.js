@@ -3,9 +3,11 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import logo from './logo.svg';
 import './App.css';
+import Login from './components/Login'
 import NavBar from './components/NavBar/NavBar'
 import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
+import ShufflerAppContainer from './components/ShufflerApp/ShufflerAppContainer'
 import {fetchAlbums, fetchSongs} from './service'
 import Loader from './components/utils/Loader'
 
@@ -68,6 +70,11 @@ class App extends React.Component {
 				<div className="app">
 					<NavBar />
 					<Switch>
+
+						<Route exact path='/login' render={(routerProps) => {
+								return <Login history={routerProps.history} />
+							}} />
+
 						<Route exact path="/admin/upload" render={(routerProps) => {
 								return <FileUploadContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
 							}} />
@@ -76,9 +83,15 @@ class App extends React.Component {
 								return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
 							}} />
 
+							<Route exact path="/" render={(routerProps) => {
+										return <ShufflerAppContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+									}} />
+
 						<Route exact path="/app" render={(routerProps) => {
-									return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+									return <ShufflerAppContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
 								}} />
+
+						<Redirect to='/' />
 
 
 					</Switch>

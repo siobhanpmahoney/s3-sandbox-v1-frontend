@@ -1,4 +1,11 @@
 import React from 'react'
+
+import {withRouter} from 'react-router'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import WithAuth from '../../wrappers/WithAuth'
+
 import FileUploadPreview from './FileUploadPreview'
 import FileUploadForm from './FileUploadForm'
 import FileAlbumInput from './FileAlbumInput'
@@ -350,4 +357,11 @@ class FileUploadContainer extends React.Component {
     }
   }
 
-  export default FileUploadContainer
+function mapStateToProps(state, props) {
+  return {
+    user: state.user,
+  }
+}
+
+
+  export default withRouter(connect(mapStateToProps, {})(WithAuth(FileUploadContainer)))
