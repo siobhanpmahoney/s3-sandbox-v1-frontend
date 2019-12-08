@@ -10,6 +10,12 @@ import FileUploadContainer from './components/FileUploads/FileUploadContainer'
 import ShufflerAppContainer from './components/ShufflerApp/ShufflerAppContainer'
 import {fetchAlbums, fetchSongs} from './service'
 import Loader from './components/utils/Loader'
+import ls from 'local-storage'
+
+import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux';
+import {removeCurrentUserAction} from './actions'
+
 
 class App extends React.Component {
 	constructor(props) {
@@ -21,6 +27,14 @@ class App extends React.Component {
 			_legacyMusicData: []
 		};
 
+	}
+
+	logOutCurrentUser = () => {
+		debugger;
+		if (ls.get('jwt_token')) {
+			ls.remove('jwt_token')
+			this.props.removeCurrentUserAction()
+		}
 	}
 
 	componentDidMount() {
@@ -68,7 +82,7 @@ class App extends React.Component {
 		} else {
 			return (
 				<div className="app">
-					<NavBar />
+					<NavBar logOutCurrentUser={this.logOutCurrentUser}/>
 					<Switch>
 
 						<Route exact path='/login' render={(routerProps) => {
@@ -99,6 +113,16 @@ class App extends React.Component {
 			)
 		}
 	}
+}
+
+function mapStateToProps(state, props) {
+	  return {
+	    user: state.user,
+	  }
 	}
 
-		export default App;
+function mapDispatchToProps(dispatch) {
+	  return bindActionCreators({removeCurrentUserAction}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

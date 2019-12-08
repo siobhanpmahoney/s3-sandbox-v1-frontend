@@ -1,5 +1,9 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+
 
 const NavListItem = ({ to, children }) => {
   return (
@@ -15,7 +19,7 @@ const NavListItem = ({ to, children }) => {
   )
 }
 
-const NavList = ({ list }) => {
+const NavList = ({ list, logOutCurrentUser }) => {
   return (
     <ul className="nav__list">
       { list.map(({ text, to }) => (
@@ -23,6 +27,9 @@ const NavList = ({ list }) => {
           { text }
         </NavListItem>
       ))}
+      <button className={`nav__list-item`} onClick={logOutCurrentUser}>
+        Log Out
+      </button>
     </ul>
   )
 }

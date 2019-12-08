@@ -28,7 +28,6 @@ const login_headers = () => {
 
 export const loginCurrentUser = (credentials) => {
   const user = {user: credentials}
-  debugger
   return fetch(`${API_ROOT}/login`, {
     method: 'POST',
     headers: login_headers(),
@@ -40,6 +39,8 @@ export const loginCurrentUser = (credentials) => {
   }).then(res => res.json())
 }
 
+
+
 // passing JWT token to /profile, returns user data
 export const fetchCurrentUser = (jwt) => {
   return fetch(`${API_ROOT}/profile`, {
@@ -50,25 +51,34 @@ export const fetchCurrentUser = (jwt) => {
 }
 
 export const fetchAlbums = () => {
-  return fetch("http://localhost:3000/api/v1/albums")
+  return fetch("http://localhost:3000/api/v1/albums", {
+    method: 'GET',
+    headers: AUTHORIZED_HEADERS()
+  })
   .then(results => results.json())
 }
 
 export const fetchSongs = () => {
-  return fetch("http://localhost:3000/api/v1/songs")
+  return fetch("http://localhost:3000/api/v1/songs", {
+    method: 'GET',
+    headers: AUTHORIZED_HEADERS()
+  })
   .then(results => results.json())
 }
 
 export const createSong = (songParams) => {
   return fetch("http://localhost:3000/api/v1/songs", {
     method: 'POST',
-    headers: HEADERS,
+    headers: AUTHORIZED_HEADERS(),
     body: JSON.stringify({song: songParams})
   })
   .then(response => response.json())
 }
 
 export const getSignedUrl = (s3key) => {
-  return fetch(`http://localhost:3000/api/v1/s3/signed_url?bucket=${s3sandbox}&key=${s3key}`)
+  return fetch(`http://localhost:3000/api/v1/s3/signed_url?bucket=${s3sandbox}&key=${s3key}`, {
+    method: 'GET',
+    headers: AUTHORIZED_HEADERS()
+  })
     .then(response => response.json())
 }

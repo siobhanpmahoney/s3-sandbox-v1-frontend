@@ -13,10 +13,23 @@ export default function (WrappedComponent) {
     componentDidMount() {
        if (ls.get('jwt_token') && !this.props.user.id) {
         this.props.fetchCurrentUserAction(ls.get('jwt_token'))
-        .then(user_id => this.props.fetchJobAppsAction2())
+        // .then(user_id => {
+        //   debugger
+        //   return user_id.json()
+        // })
 
        }
 
+    }
+
+    componentDidUpdate(prevProps) {
+      debugger;
+      console.log('WithAuth did update');
+      if (prevProps.user.id && !this.props.user.id && !ls.get('jwt_token')) {
+        return (
+          <Redirect to="/" />
+        )
+      }
     }
 
     render() {
@@ -37,7 +50,7 @@ export default function (WrappedComponent) {
 
   function mapStateToProps(state) {
     return {
-      user: state.user
+      user: Object.assign({}, state.user),
     }
   }
 

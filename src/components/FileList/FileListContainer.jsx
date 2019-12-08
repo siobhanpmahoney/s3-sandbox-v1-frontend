@@ -1,4 +1,11 @@
 import React from 'react'
+
+import {withRouter} from 'react-router'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import WithAuth from '../../wrappers/WithAuth'
+
 import AlbumListItem from './AlbumListItem'
 import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
@@ -49,4 +56,10 @@ class FileListContainer extends React.Component {
 
 }
 
-export default FileListContainer
+function mapStateToProps(state, props) {
+  return {
+    user: state.user,
+  }
+}
+
+export default withRouter(connect(mapStateToProps, {})(WithAuth(FileListContainer)))
