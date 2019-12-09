@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux'
 import {user} from './user'
+import {albums} from './albums'
 
 const rootReducer = combineReducers({
-  user
+  user,
+  albums
   // other reducers
 });
 

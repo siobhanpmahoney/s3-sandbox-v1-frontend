@@ -14,7 +14,7 @@ import ls from 'local-storage'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux';
-import {removeCurrentUserAction} from './actions'
+import {removeCurrentUserAction,fetchAlbumDataAction} from './actions'
 
 
 class App extends React.Component {
@@ -30,7 +30,6 @@ class App extends React.Component {
 	}
 
 	logOutCurrentUser = () => {
-		debugger;
 		if (ls.get('jwt_token')) {
 			ls.remove('jwt_token')
 			this.props.removeCurrentUserAction()
@@ -38,6 +37,7 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
+		this.props.fetchAlbumDataAction()
 		this.fetchAlbumsForState()
 		.then(res => this.setState({
 			view: "upload",
@@ -46,12 +46,13 @@ class App extends React.Component {
 		.then(x => this.fetchSongsForState())
 		.then(results => this.setState({
 			songData: results
-		}))
+		}), () => console.log('after setting props with redux?', this.props))
 	}
 
 	fetchAlbumsForState = () => {
 		return fetchAlbums()
 		.then(json => {
+			console.log(json)
 			return json
 		})
 	}
@@ -122,7 +123,7 @@ function mapStateToProps(state, props) {
 	}
 
 function mapDispatchToProps(dispatch) {
-	  return bindActionCreators({removeCurrentUserAction}, dispatch)
+	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
