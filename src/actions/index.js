@@ -59,7 +59,6 @@ export function fetchSongDataAction() {
 }
 
 export function createVersionAction(song, formdata) {
-  debugger
   return(dispatch) => {
 
   if (!song.id) {
@@ -75,14 +74,14 @@ export function createVersionAction(song, formdata) {
 
     return createVersion(formdata)
     .then(res => {
-      // console.log(res)
-      // song["versions"] = [song["versions"],...res]
-      // dispatch({
-      //   type: CREATE_VERSION,
-      //   payload: song
-      // })
-
+      song["versions"] = [...song["versions"], res]
+      dispatch({
+        type: CREATE_VERSION,
+        payload: song
+      })
+      return res
     })
+
   }
 
 
