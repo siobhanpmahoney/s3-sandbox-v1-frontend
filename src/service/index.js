@@ -74,6 +74,19 @@ export const createSong = (songParams) => {
   .then(response => response.json())
 }
 
+export const createVersion = (formdata) => {
+  const jwt = ls.get('jwt_token')
+
+  return fetch("http://localhost:3000/api/v1/versions", {
+    method: 'POST',
+    headers: {
+      "Authorization": `Bearer ${jwt}`
+    },
+    body: formdata
+  })
+  .then(response => response.json())
+}
+
 export const getSignedUrl = (s3key) => {
   return fetch(`http://localhost:3000/api/v1/s3/signed_url?bucket=${s3sandbox}&key=${s3key}`, {
     method: 'GET',

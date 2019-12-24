@@ -3,7 +3,7 @@ import React from 'react'
 import {withRouter} from 'react-router'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction} from '../../actions'
+import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction, createVersionAction} from '../../actions'
 
 import WithAuth from '../../wrappers/WithAuth'
 
@@ -163,51 +163,51 @@ class FileUploadContainer extends React.Component {
     sendToS3 = event => {
       event.preventDefault();
 
-      if (this.state.songInput.id == null) {
-        createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
-        .then(response => {
-          let songInputState = Object.assign({}, this.state.songInput)
-          songInputState['id'] = response.id
-          this.setState({
-            songInput: songInputState
-          })
-        })
-        .then(res => this.prepareVersionDataForS3())
-      } else {
+      // if (this.state.songInput.id == null) {
+      //   createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
+      //   .then(response => {
+      //     let songInputState = Object.assign({}, this.state.songInput)
+      //     songInputState['id'] = response.id
+      //     this.setState({
+      //       songInput: songInputState
+      //     })
+      //   })
+      //   .then(res => this.prepareVersionDataForS3())
+      // } else {
         return this.prepareVersionDataForS3()
-      }
+      // }
     }
 
     prepareVersionDataForS3 = () => {
       let formdata = new FormData();
-      formdata.append('song_id', this.state.songInput.id);
+      // formdata.append('song_id', this.state.songInput.id);
       formdata.append('date', this.state.dateInput)
       formdata.append('description', this.state.descriptionInput)
-      formdata.append('file', this.state.files[0]);
+      formdata.append('file', this.state.files[0])
 
-      fetch('http://localhost:3000/api/v1/versions', {
-        method: 'POST',
-        body: formdata,
-      })
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          return alert("error")
-        }
-      })
+
+
+      // fetch('http://localhost:3000/api/v1/versions', {
+      //   method: 'POST',
+      //   body: formdata,
+      // })
+      // .then(response => {
+      //   if (response.ok) {
+      //     return response.json()
+      //   } else {
+      //     return alert("error")
+      //   }
+      // })
+
+      this.props.createVersionAction(this.state.songInput, formdata)
+
+
       .then(j => {
         this.setState({
           confirmedUploadedFile: j
         }, this.onToggleFileUploadConfirmation)
         return this.clearMetadataOnSubmit()
-        // return this.clearMetadataOnSubmit()
       })
-      // .then(rez => rez.json())
-      // .then(j => {
-      //   console.log("j", j)
-      //   return this.clearMetadataOnSubmit()
-      // })
     }
 
     onToggleFileUploadConfirmation = () => {
@@ -365,7 +365,7 @@ class FileUploadContainer extends React.Component {
   	}
 
   function mapDispatchToProps(dispatch) {
-  	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction}, dispatch)
+  	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction, createVersionAction}, dispatch)
   }
 
 
