@@ -73,12 +73,7 @@ class App extends React.Component {
 
 
 	render() {
-		// if (!this.state.albumData || !this.state.songData) {
-		// 	return (
-		// 		<div className="app">
-		// 			<Loader />
-		// 		</div>
-		// 	)
+
 		if (!this.props.albums || !this.props.songs) {
 			return (
 				<div className="app">
@@ -98,19 +93,19 @@ class App extends React.Component {
 							}} />
 
 						<Route exact path="/admin/upload" render={(routerProps) => {
-								return <FileUploadContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
+								return <FileUploadContainer history={routerProps.history} />
 							}} />
 
 						<Route exact path="/admin/manage" render={(routerProps) => {
-								return <FileListContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
+								return <FileListContainer history={routerProps.history} />
 							}} />
 
 							<Route exact path="/" render={(routerProps) => {
-										return <ShufflerAppContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
+										return <ShufflerAppContainer history={routerProps.history} />
 									}} />
 
 						<Route exact path="/app" render={(routerProps) => {
-									return <ShufflerAppContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
+									return <ShufflerAppContainer history={routerProps.history} />
 								}} />
 
 						<Redirect to='/' />
