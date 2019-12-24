@@ -160,25 +160,26 @@ class FileUploadContainer extends React.Component {
     }
 
 
-    sendToS3 = event => {
-      event.preventDefault();
+    // sendToS3 = event => {
+    //   event.preventDefault();
+    //
+    //   // if (this.state.songInput.id == null) {
+    //   //   createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
+    //   //   .then(response => {
+    //   //     let songInputState = Object.assign({}, this.state.songInput)
+    //   //     songInputState['id'] = response.id
+    //   //     this.setState({
+    //   //       songInput: songInputState
+    //   //     })
+    //   //   })
+    //   //   .then(res => this.prepareVersionDataForS3())
+    //   // } else {
+    //     return this.prepareVersionDataForS3()
+    //   // }
+    // }
 
-      // if (this.state.songInput.id == null) {
-      //   createSong({album_id: this.state.songInput.album_id, title: this.state.songInput.title})
-      //   .then(response => {
-      //     let songInputState = Object.assign({}, this.state.songInput)
-      //     songInputState['id'] = response.id
-      //     this.setState({
-      //       songInput: songInputState
-      //     })
-      //   })
-      //   .then(res => this.prepareVersionDataForS3())
-      // } else {
-        return this.prepareVersionDataForS3()
-      // }
-    }
-
-    prepareVersionDataForS3 = () => {
+    sendToS3 = (event) => {
+      event.preventDefault()
       let formdata = new FormData();
       // formdata.append('song_id', this.state.songInput.id);
       formdata.append('date', this.state.dateInput)

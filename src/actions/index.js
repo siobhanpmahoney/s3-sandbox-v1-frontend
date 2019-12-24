@@ -62,16 +62,26 @@ export function createVersionAction(song, formdata) {
   return(dispatch) => {
 
   if (!song.id) {
-    createSong({album_id: song.album_id, title: song.title})
+    return createSong({album_id: song.album_id, title: song.title})
     .then(response => {
       song = Object.assign({}, song, response)
       console.log(song)
       return song
     })
-  }
-
-  formdata.append('song_id', song.id)
-
+    .then(newSong => {
+      formdata.append('song_id', newSong.id)
+      return createVersion(formdata)
+      .then(res => {
+        song["versions"] = [...song["versions"], res]
+        dispatch({
+          type: CREATE_VERSION,
+          payload: song
+        })
+        return res
+      })
+    })
+  } else {
+    formdata.append('song_id', song.id)
     return createVersion(formdata)
     .then(res => {
       song["versions"] = [...song["versions"], res]
@@ -81,6 +91,18 @@ export function createVersionAction(song, formdata) {
       })
       return res
     })
+  }
+
+  // formdata.append('song_id', song.id)
+    // createVersion(formdata)
+    // .then(res => {
+    //   song["versions"] = [...song["versions"], res]
+    //   dispatch({
+    //     type: CREATE_VERSION,
+    //     payload: song
+    //   })
+    //   return res
+    // })
 
   }
 
