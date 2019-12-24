@@ -3,6 +3,7 @@ import React from 'react'
 import {withRouter} from 'react-router'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction} from '../../actions'
 
 import WithAuth from '../../wrappers/WithAuth'
 
@@ -40,7 +41,6 @@ class FileUploadContainer extends React.Component {
   }
 
   componentDidMount() {
-    console.log("state on mount", this.props)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,10 +61,10 @@ class FileUploadContainer extends React.Component {
 
   parseAlbumOptions = () => {
     if (this.state.songInput != null) {
-      let album = this.props.albumData.find((album) => album.id == this.state.songInput.album_id )
+      let album = this.props.albums.find((album) => album.id == this.state.songInput.album_id )
       return {value: album.id, label: album.title}
     } else {
-      return this.props.albumData.map((album) => {
+      return this.props.albums.map((album) => {
         return {value: album.id, label: album.title}
       })
     }
@@ -73,12 +73,12 @@ class FileUploadContainer extends React.Component {
   parseSongOptions = () => {
     let songs
     this.state.albumInput != null ? (
-      songs = this.props.songData.filter((song) => song.album_id == this.state.albumInput.id)
+      songs = this.props.songs.filter((song) => song.album_id == this.state.albumInput.id)
       .map((s) => {
         return { value: s.id, label: s.title }
       })
     ) : (
-      songs = this.props.songData.map((song) => {
+      songs = this.props.songs.map((song) => {
         return { value: song.id, label: song.title }
       })
     )
@@ -96,7 +96,7 @@ class FileUploadContainer extends React.Component {
       }, this.parseSongOptions)
     } else {
       this.setState({
-        albumInput: this.props.albumData.find((album) => album.id == newValue.value)
+        albumInput: this.props.albums.find((album) => album.id == newValue.value)
       }, this.parseSongOptions)
     }
 
@@ -111,15 +111,15 @@ class FileUploadContainer extends React.Component {
       if (!!newValue.__isNew__) {
         this.onCreateSong(newValue)
       } else if (this.state.albumInput == null) {
-        let song = this.props.songData.find((song) => song.id == newValue.value)
+        let song = this.props.songs.find((song) => song.id == newValue.value)
 
-        let album = this.props.albumData.find((album) => album.id == song.album_id)
+        let album = this.props.albums.find((album) => album.id == song.album_id)
         this.setState({
           albumInput: album,
           songInput: song
         }, this.renderSongInput)
       } else {
-        let song = this.props.songData.find((song) => song.id == newValue.value)
+        let song = this.props.songs.find((song) => song.id == newValue.value)
         this.setState({
           songInput: song
         }, this.parseAlbumOptions)
@@ -197,7 +197,6 @@ class FileUploadContainer extends React.Component {
         }
       })
       .then(j => {
-        console.log("j", j)
         this.setState({
           confirmedUploadedFile: j
         }, this.onToggleFileUploadConfirmation)
@@ -292,7 +291,7 @@ class FileUploadContainer extends React.Component {
     renderFileUploadConfirmation = () => {
       if (!!this.state.confirmedUploadedFile) {
         return (
-          <FileUploadConfirmation version={this.state.confirmedUploadedFile} album={this.props.albumData.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
+          <FileUploadConfirmation version={this.state.confirmedUploadedFile} album={this.props.albums.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
         )
       } else {
         return;
@@ -303,7 +302,7 @@ class FileUploadContainer extends React.Component {
     render() {
       return (
         <div className="file-upload-container">
-          {!!this.props.albumData && !!this.props.songData && this.props.albumData.length > 0 && this.props.songData.length > 0 ? (
+          {!!this.props.albums && !!this.props.songs && this.props.albums.length > 0 && this.props.songs.length > 0 ? (
 
             <div className="file-upload-info-container">
               {!!this.state.isRenderingFileUploadConfirmation &&
@@ -357,11 +356,17 @@ class FileUploadContainer extends React.Component {
     }
   }
 
-function mapStateToProps(state, props) {
-  return {
-    user: state.user,
+  function mapStateToProps(state, props) {
+  	  return {
+  	    user: state.user,
+  			albums: state.albums,
+  			songs: state.songs
+  	  }
+  	}
+
+  function mapDispatchToProps(dispatch) {
+  	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction}, dispatch)
   }
-}
 
 
-  export default withRouter(connect(mapStateToProps, {})(WithAuth(FileUploadContainer)))
+  export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WithAuth(FileUploadContainer)))

@@ -1,7 +1,6 @@
 import React from 'react'
 
 const SongListData = ({songListData, selectViewOption}) => {
-  console.log(songListData)
     return (
       <div>
       {songListData.map((album) => {

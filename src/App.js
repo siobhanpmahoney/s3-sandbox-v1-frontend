@@ -14,7 +14,7 @@ import ls from 'local-storage'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux';
-import {removeCurrentUserAction,fetchAlbumDataAction} from './actions'
+import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction} from './actions'
 
 
 class App extends React.Component {
@@ -22,9 +22,8 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			view: null,
-			albumData: null,
-			songData: null,
-			_legacyMusicData: []
+			// albumData: null,
+			// songData: null
 		};
 
 	}
@@ -38,31 +37,31 @@ class App extends React.Component {
 
 	componentDidMount() {
 		this.props.fetchAlbumDataAction()
-		this.fetchAlbumsForState()
-		.then(res => this.setState({
-			view: "upload",
-			albumData: res
-		}))
-		.then(x => this.fetchSongsForState())
-		.then(results => this.setState({
-			songData: results
-		}), () => console.log('after setting props with redux?', this.props))
+		this.props.fetchSongDataAction()
+		// this.fetchAlbumsForState()
+		// .then(res => this.setState({
+		// 	view: "upload",
+		// 	albumData: res
+		// }))
+		// .then(x => this.fetchSongsForState())
+		// .then(results => this.setState({
+		// 	songData: results
+		// }))
 	}
 
-	fetchAlbumsForState = () => {
-		return fetchAlbums()
-		.then(json => {
-			console.log(json)
-			return json
-		})
-	}
-
-	fetchSongsForState = () => {
-		return fetchSongs()
-		.then(json => {
-			return json
-		})
-	}
+	// fetchAlbumsForState = () => {
+	// 	return fetchAlbums()
+	// 	.then(json => {
+	// 		return json
+	// 	})
+	// }
+	//
+	// fetchSongsForState = () => {
+	// 	return fetchSongs()
+	// 	.then(json => {
+	// 		return json
+	// 	})
+	// }
 
 	switchView = (event) => {
 		let val = event.target.value
@@ -74,7 +73,13 @@ class App extends React.Component {
 
 
 	render() {
-		if (!this.state.albumData || !this.state.songData) {
+		// if (!this.state.albumData || !this.state.songData) {
+		// 	return (
+		// 		<div className="app">
+		// 			<Loader />
+		// 		</div>
+		// 	)
+		if (!this.props.albums || !this.props.songs) {
 			return (
 				<div className="app">
 					<Loader />
@@ -83,6 +88,8 @@ class App extends React.Component {
 		} else {
 			return (
 				<div className="app">
+
+
 					<NavBar logOutCurrentUser={this.logOutCurrentUser}/>
 					<Switch>
 
@@ -91,19 +98,19 @@ class App extends React.Component {
 							}} />
 
 						<Route exact path="/admin/upload" render={(routerProps) => {
-								return <FileUploadContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+								return <FileUploadContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
 							}} />
 
 						<Route exact path="/admin/manage" render={(routerProps) => {
-								return <FileListContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+								return <FileListContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
 							}} />
 
 							<Route exact path="/" render={(routerProps) => {
-										return <ShufflerAppContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+										return <ShufflerAppContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
 									}} />
 
 						<Route exact path="/app" render={(routerProps) => {
-									return <ShufflerAppContainer history={routerProps.history} albumData={this.state.albumData} songData={this.state.songData} _legacyMusicData={this.state._legacyMusicData || []} />
+									return <ShufflerAppContainer history={routerProps.history} albumData={this.props.albums} songData={this.props.songs} />
 								}} />
 
 						<Redirect to='/' />
@@ -119,11 +126,13 @@ class App extends React.Component {
 function mapStateToProps(state, props) {
 	  return {
 	    user: state.user,
+			albums: state.albums,
+			songs: state.songs
 	  }
 	}
 
 function mapDispatchToProps(dispatch) {
-	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction}, dispatch)
+	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

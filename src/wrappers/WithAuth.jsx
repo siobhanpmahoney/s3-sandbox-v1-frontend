@@ -23,7 +23,6 @@ export default function (WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      console.log('WithAuth did update');
       if (prevProps.user.id && !this.props.user.id && !ls.get('jwt_token')) {
         return (
           <Redirect to="/" />

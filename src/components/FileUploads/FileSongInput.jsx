@@ -3,7 +3,6 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 const FileSongInput = ({loadSongOptions, parseSongOptions, onSelectSong, onCreateSong, songInput}) => {
-  console.log(songInput())
   return (
     <div className="file-song-input-container">
       <CreatableSelect

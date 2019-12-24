@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import WithAuth from '../../wrappers/WithAuth'
+import Loader from '../utils/Loader'
 
 import AlbumListItem from './AlbumListItem'
 import SongListData from './SongListData'
@@ -36,22 +37,28 @@ class FileListContainer extends React.Component {
   //   fetch("http://localhost:3000/api/v1/albums")
   //   .then(results => results.json())
   //   .then(json => {
-  //     console.log(json)
   //     return this.setState({
   //       songListData: json
   //     })
   //   })
-  //   console.log(this.props)
   // }
 
   render() {
-    return (
-      <div>
-        {this.props.albumData.map((album) => {
-          return <AlbumListItem album={album} songList = {album.songs}/>
-        })}
-      </div>
-    )
+    console.log("props at render", this.props)
+
+    if (!!this.props.albums && this.props.albums.length > 1) {
+      return (
+        <div>
+          {this.props.albums.map((album) => {
+            return <AlbumListItem album={album} songList = {album.songs} key={album.id}/>
+          })}
+        </div>
+      )
+    } else {
+      return <Loader />
+
+    }
+
   }
 
 }
@@ -59,6 +66,8 @@ class FileListContainer extends React.Component {
 function mapStateToProps(state, props) {
   return {
     user: state.user,
+    albums: state.albums,
+    songs: state.songs
   }
 }
 

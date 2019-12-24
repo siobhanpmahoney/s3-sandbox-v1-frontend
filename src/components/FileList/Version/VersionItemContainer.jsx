@@ -39,7 +39,6 @@ class VersionItemContainer extends React.Component {
   }
 
   toggleAudioReady = () => {
-    console.log(this.state.signedUrl)
     this.setState({
       audioReady: !this.state.audioReady
     }, this.renderAudio)

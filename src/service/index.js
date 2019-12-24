@@ -7,7 +7,6 @@ const HEADERS = { 'Content-Type': 'application/json', 'Accepts': 'application/js
 
 const AUTHORIZED_HEADERS = () => {
   const jwt = ls.get('jwt_token')
-  console.log(jwt)
   return {
     'Content-Type': 'application/json',
     'Accepts': 'application/json',
