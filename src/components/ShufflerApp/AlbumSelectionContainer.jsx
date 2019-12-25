@@ -7,6 +7,18 @@ import AlbumSelectionItem from './AlbumSelectionItem'
 
 const AlbumSelectionContainer = (props) => {
 
+  const generatePlaylist = (album_id) => {
+    let album = props.albums.find((album) => album.id == album_id)
+    let list = album.songs.map((song) => {
+      let version = song.versions[Math.floor(Math.random() * song.versions.length)]
+      const {title, album_id} = song
+      let s = {song_title: title, album_id: album_id}
+
+      let obj = Object.assign({}, version, s)
+      return obj
+    })
+    console.log(list)
+  }
 
     return (
       <div className="album-selection-page">
@@ -22,7 +34,7 @@ const AlbumSelectionContainer = (props) => {
                 <div className="albumTeaser__group">
                   <div className="albumTeaser__groupInner">
                     {props.albums.map((album) => {
-                      return <AlbumSelectionItem key={album.id} album={album} />
+                      return <AlbumSelectionItem key={album.id} album={album} generatePlaylist={generatePlaylist}/>
                     })}
                   </div>
                 </div>

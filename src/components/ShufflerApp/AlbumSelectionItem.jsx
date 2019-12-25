@@ -4,9 +4,17 @@ import {withRouter} from 'react-router'
 import Loader from '../utils/Loader'
 
 const AlbumSelectionItem = (props) => {
-  console.log(props)
+  const songVersionParams = () => {
+    let songArray = props.album.songs
+    console.log(songArray)
+  }
+
+
+
     return (
+
       !!props.album ? (
+
       <div className="albumTeaser">
            <div className="albumTeaser__inner">
 
@@ -18,7 +26,7 @@ const AlbumSelectionItem = (props) => {
 
              <header className="albumTeaser__header">
                <h3 className="albumTeaser__title">
-                 <Link className="albumTeaser__titleLink" to ={`/playlist/${props.album.id}`}>
+                 <Link onClick={() => props.generatePlaylist(props.album.id)} className="albumTeaser__titleLink" to ={`/playlist?album=${props.album.id}`}>
                    {props.album.title}
                  </Link>
                </h3>
