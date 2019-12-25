@@ -9,10 +9,40 @@ const AlbumSelectionContainer = (props) => {
 
 
     return (
-      <div>
-        {props.albums.map((album) => {
-          return <AlbumSelectionItem key={album.id} album={album} />
-        })}
+      <div className="album-selection-page">
+        <div className="album-selection-page-main-content">
+          <div className="album-selection-page-container">
+
+            <div className="section-header">
+              Discography
+            </div>
+
+            <div className="albumGrid">
+              <div className="albumTeaser__row">
+                <div className="albumTeaser__group">
+                  <div className="albumTeaser__groupInner">
+                    {props.albums.map((album) => {
+                      return <AlbumSelectionItem key={album.id} album={album} />
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </div>
       </div>
     )
 

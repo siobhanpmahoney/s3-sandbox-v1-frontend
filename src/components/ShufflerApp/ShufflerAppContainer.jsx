@@ -17,7 +17,7 @@ class ShufflerAppContainer extends React.Component {
       <div>
         Select Artist
         <div>
-        <button onClick={this.goToPage}>cleeeeeek</button>
+        <button onClick={this.goToPage}>bcc</button>
 
         </div>
 
