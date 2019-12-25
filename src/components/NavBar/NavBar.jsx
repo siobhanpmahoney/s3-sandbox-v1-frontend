@@ -5,19 +5,29 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 const NavBar = ({logOutCurrentUser}) => {
-   if (!!ls.get('jwt_token')) {
+
+  const list = () => {
+    return !!ls.get('jwt_token') ? (
+      [
+        { to: '/', text: 'Home'},
+        { to: '/admin/upload', text: 'Upload'},
+        { to: '/admin/manage', text: 'Manage'}
+      ]
+    ) : (
+      [
+        { to: '/', text: 'Home'}
+      ]
+    )
+  }
+
+
      return (
        <nav className="nav">
-         <NavList logOutCurrentUser={logOutCurrentUser} list={[
-           { to: '/', text: 'Home'},
-           { to: '/admin/upload', text: 'Upload'},
-           { to: '/admin/manage', text: 'Manage'},
-         ]}/>
+         <NavList isLoggedIn={!!ls.get('jwt_token')} logOutCurrentUser={logOutCurrentUser} list={list()} />
        </nav>
      )
-   } else {
-     return <div></div>
-   }
+
+
 }
 
 function mapStateToProps(state, props) {

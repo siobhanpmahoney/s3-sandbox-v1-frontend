@@ -8,6 +8,8 @@ import NavBar from './components/NavBar/NavBar'
 import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
 import ShufflerAppContainer from './components/ShufflerApp/ShufflerAppContainer'
+import AlbumSelectionContainer from './components/ShufflerApp/AlbumSelectionContainer'
+
 import {fetchAlbums, fetchSongs} from './service'
 import Loader from './components/utils/Loader'
 import ls from 'local-storage'
@@ -100,13 +102,13 @@ class App extends React.Component {
 								return <FileListContainer history={routerProps.history} />
 							}} />
 
-							<Route exact path="/" render={(routerProps) => {
+						<Route exact path="/" render={(routerProps) => {
 										return <ShufflerAppContainer history={routerProps.history} />
 									}} />
 
-						<Route exact path="/app" render={(routerProps) => {
-									return <ShufflerAppContainer history={routerProps.history} />
-								}} />
+						<Route exact path="/music" render={(routerProps) => {
+								return <AlbumSelectionContainer history={routerProps.history} />
+							}} />
 
 						<Redirect to='/' />
 

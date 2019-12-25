@@ -1,13 +1,29 @@
 import React from 'react'
+import {withRouter} from 'react-router'
+import AlbumSelectionContainer from './AlbumSelectionContainer'
 
 class ShufflerAppContainer extends React.Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  goToPage = () => {
+    return this.props.history.push("/music")
+  }
+
   render() {
     return (
       <div>
-        The App Lives Here
+        Select Artist
+        <div>
+        <button onClick={this.goToPage}>cleeeeeek</button>
+
+        </div>
+
       </div>
     )
   }
 }
 
-export default ShufflerAppContainer
+export default withRouter(ShufflerAppContainer)

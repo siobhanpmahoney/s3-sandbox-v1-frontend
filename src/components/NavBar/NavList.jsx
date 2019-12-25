@@ -19,7 +19,7 @@ const NavListItem = ({ to, children }) => {
   )
 }
 
-const NavList = ({ list, logOutCurrentUser }) => {
+const NavList = ({ list, logOutCurrentUser, isLoggedIn }) => {
   return (
     <ul className="nav__list">
       { list.map(({ text, to }) => (
@@ -27,9 +27,13 @@ const NavList = ({ list, logOutCurrentUser }) => {
           { text }
         </NavListItem>
       ))}
-      <button className={`nav__list-item`} onClick={logOutCurrentUser}>
-        Log Out
-      </button>
+
+      {!!isLoggedIn &&
+        <button className={`nav__list-item`} onClick={logOutCurrentUser}>
+          Log Out
+        </button>
+      }
+
     </ul>
   )
 }
