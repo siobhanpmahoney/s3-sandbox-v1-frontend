@@ -9,6 +9,7 @@ import FileListContainer from './components/FileList/FileListContainer'
 import FileUploadContainer from './components/FileUploads/FileUploadContainer'
 import ShufflerAppContainer from './components/ShufflerApp/ShufflerAppContainer'
 import AlbumSelectionContainer from './components/ShufflerApp/AlbumSelectionContainer'
+import PlaylistContainer from './components/ShufflerApp/Playlist/PlaylistContainer'
 
 import {fetchAlbums, fetchSongs} from './service'
 import Loader from './components/utils/Loader'
@@ -108,6 +109,10 @@ class App extends React.Component {
 
 						<Route exact path="/music" render={(routerProps) => {
 								return <AlbumSelectionContainer history={routerProps.history} />
+							}} />
+
+						<Route path="/playlist/:albumId" render={(routerProps) => {
+								return <PlaylistContainer albumId={routerProps.match.params.albumId} history={routerProps.history} />
 							}} />
 
 						<Redirect to='/' />
