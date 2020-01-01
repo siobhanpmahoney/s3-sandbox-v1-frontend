@@ -3,11 +3,23 @@ import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router'
 import Loader from '../utils/Loader'
 
+
+// songId=trackId, songId=trackId
+
 const AlbumSelectionItem = (props) => {
+
   const songVersionParams = () => {
     let songArray = props.album.songs
-    console.log(songArray)
+    return songArray.map((song) => {
+      return `${song.id}=${song.versions[0].id}`
+    }).join("&")
   }
+
+  const generatePath = () => {
+    return
+  }
+
+  console.log(`/playlist?album=${props.album.id}+tracks=${songVersionParams()}`)
 
 
 
@@ -26,7 +38,7 @@ const AlbumSelectionItem = (props) => {
 
              <header className="albumTeaser__header">
                <h3 className="albumTeaser__title">
-                 <Link onClick={() => props.generatePlaylist(props.album.id)} className="albumTeaser__titleLink" to ={`/playlist?album=${props.album.id}`}>
+                 <Link onClick={() => props.generatePlaylist(props.album.id)} className="albumTeaser__titleLink" to ={`/playlist/album=${props.album.id}`}>
                    {props.album.title}
                  </Link>
                </h3>

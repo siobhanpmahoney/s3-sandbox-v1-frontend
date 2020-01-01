@@ -111,7 +111,7 @@ class App extends React.Component {
 								return <AlbumSelectionContainer history={routerProps.history} />
 							}} />
 
-						<Route path="/playlist?album=:albumId&tracks=:songParams" render={(routerProps) => {
+						<Route path="/playlist/album=:albumId" render={(routerProps) => {
 								return <PlaylistContainer albumId={routerProps.match.params.albumId} album={this.props.albums.find((album) => routerProps.match.params.albumId == album.id)} history={routerProps.history} songParams={routerProps.match.params.songParams} />
 							}} />
 
