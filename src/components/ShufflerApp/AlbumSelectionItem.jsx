@@ -19,7 +19,7 @@ const AlbumSelectionItem = (props) => {
     return
   }
 
-  console.log(`/playlist?album=${props.album.id}+tracks=${songVersionParams()}`)
+  console.log(`/playlist/album=${props.album.id}?tracks=${songVersionParams()}`)
 
 
 
@@ -38,7 +38,7 @@ const AlbumSelectionItem = (props) => {
 
              <header className="albumTeaser__header">
                <h3 className="albumTeaser__title">
-                 <Link onClick={() => props.generatePlaylist(props.album.id)} className="albumTeaser__titleLink" to ={`/playlist/album=${props.album.id}`}>
+                 <Link onClick={() => props.generatePlaylist(props.album.id)} className="albumTeaser__titleLink" to ={`/playlist/album=${props.album.id}?tracks=${songVersionParams()}`}>
                    {props.album.title}
                  </Link>
                </h3>
