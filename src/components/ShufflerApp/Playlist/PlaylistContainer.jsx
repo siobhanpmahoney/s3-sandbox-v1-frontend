@@ -16,13 +16,27 @@ class PlaylistContainer extends React.Component {
   }
 
   trackParser = () => {
-    return this.props.location.search.split("?tracks=")[1].split("&").map((couple) => {
-      return {song: couple.split("=")[0], version: couple.split("=")[1]}
+    let trackObj = {}
+    this.props.location.search.split("?tracks=")[1].split("&").forEach((songVersionPair) => {
+      return trackObj[songVersionPair.split("=")[0]] = songVersionPair.split("=")[1]
+    })
+    return trackObj
+  }
+
+  // {song: {...songData}, version: {...versionData}}
+
+  retrievedTracks = () => {
+    let songTrackPairs = this.trackParser()
+    return this.props.album.songs.map((song) => {
+
+      return {title: song.title, id: song.id, version: song.versions.find((v) => v.id == songTrackPairs[song.id])}
     })
   }
 
   render() {
-    console.log("in render — this.props: ", !!this.props.album)
+    if (!!this.props.album) {
+      console.log("retrievedTracks", this.retrievedTracks())
+    }
 
     return !this.props.album ? (
         <Loader />
