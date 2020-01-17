@@ -10,24 +10,28 @@ import Loader from '../utils/Loader'
 import AlbumListItem from './AlbumListItem'
 import SongListData from './SongListData'
 import SongListDataWithAudio from './SongListDataWithAudio'
+import { fetchAlbumDataAction, fetchSongDataAction } from '../../actions'
 
 class FileListContainer extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //
-  //   this.state = {
-  //     view: null, // choices: Song List // Song List with Audio
-  //     songListData: [], // schema:
-  //   }
-  // }
-  //
-  // componentDidMount() {
-  //   console.log(this.props)
-  //   this.setState({
-  //     view: null,
-  //     files: {},
-  //   }, this.fetchSongData)
-  // }
+  constructor(props) {
+    super(props)
+  }
+
+  componentDidMount() {
+    this.props.fetchAlbumDataAction()
+    this.props.fetchSongDataAction()
+    // this.fetchAlbumsForState()
+    // .then(res => this.setState({
+    // 	view: "upload",
+    // 	albumData: res
+    // }))
+    // .then(x => this.fetchSongsForState())
+    // .then(results => this.setState({
+    // 	songData: results
+    // }))
+  }
+
+
   //
   // getSignedUrl = () => {
   //
@@ -71,4 +75,4 @@ function mapStateToProps(state, props) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, {})(WithAuth(FileListContainer)))
+export default withRouter(connect(mapStateToProps, {fetchAlbumDataAction, fetchSongDataAction})(WithAuth(FileListContainer)))

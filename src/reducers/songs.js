@@ -8,7 +8,7 @@ export const songs = (state = [], action) => {
       // let user_state = Object.assign({}, state)
       // user_state = action.payload.user
       // return Object.assign({}, state, action.payload)
-      return [...state,...action.payload]
+      return [...DEFAULT_STATE,...action.payload]
 
     case CREATE_VERSION:
       let idx = state.find((song) => song.id == action.payload.id)

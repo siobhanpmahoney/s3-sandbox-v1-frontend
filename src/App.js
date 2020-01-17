@@ -52,19 +52,14 @@ class App extends React.Component {
 		// }))
 	}
 
-	// fetchAlbumsForState = () => {
-	// 	return fetchAlbums()
-	// 	.then(json => {
-	// 		return json
-	// 	})
-	// }
-	//
-	// fetchSongsForState = () => {
-	// 	return fetchSongs()
-	// 	.then(json => {
-	// 		return json
-	// 	})
-	// }
+	componentDidUpdate(prevProps) {
+		if (prevProps.songs.length != this.props.songs.length) {
+			console.log("prevProps: ", prevProps.songs.length)
+			console.log("props.songs.length: ", this.props.songs.length)
+			this.props.fetchSongDataAction()
+		}
+
+	}
 
 	switchView = (event) => {
 		let val = event.target.value

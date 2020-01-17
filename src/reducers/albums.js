@@ -8,7 +8,7 @@ export const albums = (state = [], action) => {
       // let user_state = Object.assign({}, state)
       // user_state = action.payload.user
       // return Object.assign({}, state, action.payload)
-      return [...state,...action.payload]
+      return [...DEFAULT_STATE,...action.payload]
 
 
     default:
