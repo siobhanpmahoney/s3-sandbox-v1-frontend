@@ -14,6 +14,7 @@ import FileSongInput from './FileSongInput'
 import FileDateInput from './FileDateInput'
 import FileDescriptionInput from './FileDescriptionInput'
 import FileUploadConfirmation from './FileUploadConfirmation'
+import NewAlbumForm from './NewAlbumForm'
 // import { createSong } from '../../service'
 import Loader from '../utils/Loader'
 
@@ -32,7 +33,8 @@ class FileUploadContainer extends React.Component {
       dateInput: undefined,
       isLoading: false,
       confirmedUploadedFile: null,
-      isRenderingFileUploadConfirmation: false
+      isRenderingFileUploadConfirmation: false,
+      isRenderingNewAlbumForm: false
     };
     this.fileInput = React.createRef();
     this.onAddFileData = this._onAddFileData.bind(this);
@@ -57,6 +59,12 @@ class FileUploadContainer extends React.Component {
     if (this.state.dateInput != prevState.dateInput) {
       this.renderDateInput()
     }
+  }
+
+  onToggleNewAlbumForm = () => {
+    this.setState({
+      isRenderingNewAlbumForm: !this.state.isRenderingNewAlbumForm
+    })
   }
 
   parseAlbumOptions = () => {
@@ -125,217 +133,236 @@ class FileUploadContainer extends React.Component {
         }, this.parseAlbumOptions)
         this.renderSongInput()
       }
-      }
     }
+  }
 
-    onCreateSong = (inputValue) => {
-      let albumInput = this.state.albumInput
-      return this.setState({
-        songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
-      }, this.parseSongOptions)
-    }
+  onCreateSong = (inputValue) => {
+    let albumInput = this.state.albumInput
+    return this.setState({
+      songInput: {id: null, title: inputValue.value, album_id: albumInput.id }
+    }, this.parseSongOptions)
+  }
 
-    _onAddFileData = event => {
+  _onAddFileData = event => {
+    this.setState({
+      files: [...this.fileInput.current.files],
+      preview: URL.createObjectURL(event.target.files[0]),
+    })
+  }
+
+  onAddFileDate = (day) => {
+    return !!day ? (
       this.setState({
-        files: [...this.fileInput.current.files],
-        preview: URL.createObjectURL(event.target.files[0]),
+        dateInput: day.toString()
       })
-    }
+    ) : (
+      null
+    )
 
-    onAddFileDate = (day) => {
-      return !!day ? (
-        this.setState({
-          dateInput: day.toString()
-        })
-      ) : (
-        null
-      )
+  }
 
-    }
+  onAddFileDescription = (event) => {
+    this.setState({
+      descriptionInput: event.target.value
+    })
+  }
 
-    onAddFileDescription = (event) => {
+  sendToS3 = (event) => {
+    event.preventDefault()
+    let formdata = new FormData();
+    // formdata.append('song_id', this.state.songInput.id);
+    formdata.append('date', this.state.dateInput)
+    formdata.append('description', this.state.descriptionInput)
+    formdata.append('file', this.state.files[0])
+
+
+    this.props.createVersionAction(this.state.songInput, formdata)
+
+
+    .then(j => {
       this.setState({
-        descriptionInput: event.target.value
-      })
-    }
-
-    sendToS3 = (event) => {
-      event.preventDefault()
-      let formdata = new FormData();
-      // formdata.append('song_id', this.state.songInput.id);
-      formdata.append('date', this.state.dateInput)
-      formdata.append('description', this.state.descriptionInput)
-      formdata.append('file', this.state.files[0])
-
-
-      this.props.createVersionAction(this.state.songInput, formdata)
-
-
-      .then(j => {
-        this.setState({
-          confirmedUploadedFile: j
-        }, this.onToggleFileUploadConfirmation)
-        return this.clearMetadataOnSubmit()
-      })
-    }
-
-    onToggleFileUploadConfirmation = () => {
-      this.setState({
-        isRenderingFileUploadConfirmation: !this.state.isRenderingFileUploadConfirmation
-      })
-    }
-
-    // after prepareVersionDataForS3 => check song created successfully (error check)
-    // if yes =>render version record
-    // else: render message indicating as much
-    // THEN clearMetadataOnSubmit
-
-
-    clearMetadataOnSubmit = () => {
-
-      this.setState({
-        files: [],
-        preview: null,
-        songInput: null,
-        albumInput: null,
-        dateInput: undefined,
-        descriptionInput: ""
-      }, this.clearFileInputRef)
-    }
-
-    clearFileInputRef = () => {
-      this.fileInput.current.value = ""
-      this.renderAlbumInput()
-      this.renderSongInput()
-      this.renderDateInput()
-    }
-
-    clearUploadConfirmation = () => {
-      this.setState({
-        confirmedUploadedFile: null
+        confirmedUploadedFile: j
       }, this.onToggleFileUploadConfirmation)
-    }
+      return this.clearMetadataOnSubmit()
+    })
+  }
+
+  onToggleFileUploadConfirmation = () => {
+    this.setState({
+      isRenderingFileUploadConfirmation: !this.state.isRenderingFileUploadConfirmation
+    })
+  }
+
+  // after prepareVersionDataForS3 => check song created successfully (error check)
+  // if yes =>render version record
+  // else: render message indicating as much
+  // THEN clearMetadataOnSubmit
 
 
-    renderAlbumInput = () => {
-      return !!this.state.albumInput ? (
-         {value: this.state.albumInput.id, label: this.state.albumInput.title}
-      ) : (
-         null
-      )
+  clearMetadataOnSubmit = () => {
 
-    }
+    this.setState({
+      files: [],
+      preview: null,
+      songInput: null,
+      albumInput: null,
+      dateInput: undefined,
+      descriptionInput: ""
+    }, this.clearFileInputRef)
+  }
 
-    renderSongInput = () => {
+  clearFileInputRef = () => {
+    this.fileInput.current.value = ""
+    this.renderAlbumInput()
+    this.renderSongInput()
+    this.renderDateInput()
+  }
 
-      return !!this.state.songInput ? (
-        {value: this.state.songInput.id, label: this.state.songInput.title}
-      ) : (
-        null
-      )
-    }
+  clearUploadConfirmation = () => {
+    this.setState({
+      confirmedUploadedFile: null
+    }, this.onToggleFileUploadConfirmation)
+  }
 
-    renderDateInput = () => {
-      return !!this.state.dateInput ? (
-        this.state.dateInput
-      ) : (
-        null
-      )
-    }
 
-    renderDescriptionInput = () => {
-      return !!this.state.descriptionInput ? (
-        this.state.descriptionInput
-      ) : (
-        null
-      )
-    }
+  renderAlbumInput = () => {
+    return !!this.state.albumInput ? (
+      {value: this.state.albumInput.id, label: this.state.albumInput.title}
+    ) : (
+      null
+    )
 
-    renderPreview = () => {
+  }
+
+  renderSongInput = () => {
+
+    return !!this.state.songInput ? (
+      {value: this.state.songInput.id, label: this.state.songInput.title}
+    ) : (
+      null
+    )
+  }
+
+  renderDateInput = () => {
+    return !!this.state.dateInput ? (
+      this.state.dateInput
+    ) : (
+      null
+    )
+  }
+
+  renderDescriptionInput = () => {
+    return !!this.state.descriptionInput ? (
+      this.state.descriptionInput
+    ) : (
+      null
+    )
+  }
+
+  renderPreview = () => {
+    return (
+      <FileUploadPreview preview = {this.state.preview} />
+    )
+  }
+
+  renderFileUploadConfirmation = () => {
+    if (!!this.state.confirmedUploadedFile) {
       return (
-        <FileUploadPreview preview = {this.state.preview} />
+        <FileUploadConfirmation version={this.state.confirmedUploadedFile} album={this.props.albums.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
       )
+    } else {
+      return;
     }
 
-    renderFileUploadConfirmation = () => {
-      if (!!this.state.confirmedUploadedFile) {
-        return (
-          <FileUploadConfirmation version={this.state.confirmedUploadedFile} album={this.props.albums.find((album) => album.id == this.state.confirmedUploadedFile.song.album_id)} clearUploadConfirmation={this.clearUploadConfirmation}/>
-        )
-      } else {
-        return;
-      }
+  }
 
+  render() {
+    const emptyArray = () => {
+      return []
     }
+    return (
+      <div className="file__upload__container">
+        {!!this.props.albums && !!this.props.songs && this.props.albums.length > 0 && this.props.songs.length > 0 ? (
 
-    render() {
-      return (
-        <div className="file-upload-container">
-          {!!this.props.albums && !!this.props.songs && this.props.albums.length > 0 && this.props.songs.length > 0 ? (
+          <div className="file__upload__info-container">
+            {!!this.state.isRenderingFileUploadConfirmation &&
 
-            <div className="file-upload-info-container">
-              {!!this.state.isRenderingFileUploadConfirmation &&
-                <div className="file-upload-confirmation-component">
-                  {this.renderFileUploadConfirmation()}
-                </div>
+              <div className="file__upload__confirmation-component">
+                {this.renderFileUploadConfirmation()}
+              </div>
 
-              }
-              <div className="file-upload-metadata-section">
-                <div className="file-upload-album-and-song-section">
+            }
+
+            <button onClick={this.onToggleNewAlbumForm}>
+              {!this.state.isRenderingNewAlbumForm ? (
+                "New Album"
+              ) : (
+                "Back"
+              )}
+            </button>
+
+            <div className="formWrapper">
+              {!this.state.isRenderingNewAlbumForm ? (
+
+              <div className="file__upload__metadata-section">
+
+                <div className="file__upload__album-and-song-section">
+
                   <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
 
                   <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+
                 </div>
 
-                <div className="file-upload-version-section">
+                <div className="file__upload__version-section">
+
                   <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
 
                   <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
+
                 </div>
-
-
-
-
+<FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
               </div>
 
-
-              <hr />
-
-              <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
-
+              ) : (
+                <NewAlbumForm />
+              )
+            }
             </div>
-          ) : (
-            <div>
-              <Loader />
-            </div>
-          )
-          }
+          </div>
 
-          {!!this.state.preview &&
-            <div>
-              <h5>Upload Preview</h5>
-              {this.renderPreview()}
-            </div>
-          }
+        ) : (
+          <div>
+            <Loader />
+          </div>
+        )
+      }
 
-
+      {!!this.state.preview &&
+        <div>
+          <h5>Upload Preview</h5>
+          {this.renderPreview()}
         </div>
-      )
+      }
 
-    }
+
+    </div>
+  )
+
+}
+}
+
+function mapStateToProps(state, props) {
+  return {
+    user: state.user,
+    albums: state.albums,
+    songs: state.songs
   }
+}
 
-  function mapStateToProps(state, props) {
-  	  return {
-  	    user: state.user,
-  			albums: state.albums,
-  			songs: state.songs
-  	  }
-  	}
-
-  function mapDispatchToProps(dispatch) {
-  	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction, createVersionAction}, dispatch)
-  }
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction, createVersionAction}, dispatch)
+}
 
 
-  export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WithAuth(FileUploadContainer)))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WithAuth(FileUploadContainer)))
