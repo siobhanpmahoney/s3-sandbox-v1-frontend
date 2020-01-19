@@ -1,13 +1,14 @@
 import React from 'react'
 
-const NewAlbumForm = () => {
+const NewAlbumForm = ({newAlbumFormListener, albumImage, albumTitle}) => {
   return (
     <div className="file__upload__new-album-form-container">
       <div classname="file__upload__new-album-form-wrapper">
         <form>
-          <input className="file__upload__new-album-form-input" name="albumTitle" />
-
-          <input className="file__upload__new-album-form-input" name="albumImage" />
+          <label>Album: </label>
+          <input onChange={newAlbumFormListener} className="file__upload__new-album-form-input" name="title" value={albumTitle} />
+          <label>Image: </label>
+          <input onChange={newAlbumFormListener} className="file__upload__new-album-form-input" name="image" value={albumImage} />
         </form>
       </div>
     </div>

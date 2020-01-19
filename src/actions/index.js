@@ -1,5 +1,5 @@
 
-import {loginCurrentUser, fetchCurrentUser, fetchAlbums, fetchSongs, createSong, createVersion} from '../service'
+import {loginCurrentUser, fetchCurrentUser, fetchAlbums, fetchSongs, createSong, createAlbum, createVersion} from '../service'
 import ls from 'local-storage'
 
 
@@ -10,6 +10,7 @@ export const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER'
 export const SET_ALBUM_DATA = 'SET_ALBUM_DATA'
 export const SET_SONG_DATA = 'SET_SONG_DATA'
 
+export const CREATE_ALBUM = 'CREATE_ALBUM'
 export const CREATE_VERSION = 'CREATE_VERSION'
 
 
@@ -53,6 +54,18 @@ export function fetchSongDataAction() {
       dispatch({
         type: SET_SONG_DATA,
         payload: response
+      })
+    })
+  }
+}
+
+export function createAlbumAction(albumData) {
+  return(dispatch) => {
+    return(createAlbum(albumData))
+    .then(res => {
+      dispatch({
+        type: CREATE_ALBUM,
+        payload: res
       })
     })
   }

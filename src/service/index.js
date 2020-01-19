@@ -65,6 +65,15 @@ export const fetchSongs = () => {
   .then(results => results.json())
 }
 
+export const createAlbum = (albumParams) => {
+  return fetch("http://localhost:3000/api/v1/albums", {
+    method: 'POST',
+    headers: AUTHORIZED_HEADERS(),
+    body: JSON.stringify({album: albumParams})
+  })
+  .then(response => response.json())
+}
+
 export const createSong = (songParams) => {
   return fetch("http://localhost:3000/api/v1/songs", {
     method: 'POST',

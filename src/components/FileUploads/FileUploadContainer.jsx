@@ -3,7 +3,7 @@ import React from 'react'
 import {withRouter} from 'react-router'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction, createVersionAction} from '../../actions'
+import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction, createAlbumAction, createVersionAction} from '../../actions'
 
 import WithAuth from '../../wrappers/WithAuth'
 
@@ -27,6 +27,10 @@ class FileUploadContainer extends React.Component {
     this.state = {
       files: [],
       preview: null,
+      newAlbumInput: {
+        title: null,
+        image: null
+      },
       albumInput: null,
       songInput: null,
       descriptionInput: "",
@@ -136,6 +140,20 @@ class FileUploadContainer extends React.Component {
     }
   }
 
+  newAlbumFormListener = (event) => {
+    let val = event.target.value
+    let updatedState = this.state.newAlbumInput
+    updatedState[event.target.name] = event.target.value
+
+    this.setState({
+      newAlbumInput: updatedState
+    }, () => console.log(this.state.newAlbumInput))
+  }
+
+  onCreateAlbum = () => {
+
+  }
+
   onCreateSong = (inputValue) => {
     let albumInput = this.state.albumInput
     return this.setState({
@@ -175,9 +193,7 @@ class FileUploadContainer extends React.Component {
     formdata.append('description', this.state.descriptionInput)
     formdata.append('file', this.state.files[0])
 
-
     this.props.createVersionAction(this.state.songInput, formdata)
-
 
     .then(j => {
       this.setState({
@@ -294,43 +310,39 @@ class FileUploadContainer extends React.Component {
             }
 
             <button onClick={this.onToggleNewAlbumForm}>
-              {!this.state.isRenderingNewAlbumForm ? (
-                "New Album"
-              ) : (
-                "Back"
-              )}
+
+              {!this.state.isRenderingNewAlbumForm ? "New Album" : "Back" }
+
             </button>
 
             <div className="formWrapper">
               {!this.state.isRenderingNewAlbumForm ? (
 
-              <div className="file__upload__metadata-section">
+                <div className="file__upload__metadata-section">
 
-                <div className="file__upload__album-and-song-section">
+                  <div className="file__upload__album-and-song-section">
 
-                  <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
+                    <FileAlbumInput onSelectAlbum={this.onSelectAlbum} parseAlbumOptions={this.parseAlbumOptions} albumInput={this.renderAlbumInput} />
 
-                  <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
+                    <FileSongInput onSelectSong={this.onSelectSong} onCreateSong={this.onCreateSong} parseSongOptions={this.parseSongOptions} songInput={this.renderSongInput} />
 
+                  </div>
+
+                  <div className="file__upload__version-section">
+
+                    <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
+
+                    <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
+
+                  </div>
+                  <FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
                 </div>
-
-                <div className="file__upload__version-section">
-
-                  <FileDateInput onAddFileDate={this.onAddFileDate} dateInput={this.renderDateInput}/>
-
-                  <FileDescriptionInput onAddFileDescription={this.onAddFileDescription} descriptionInput={this.state.descriptionInput} />
-
-                </div>
-<FileUploadForm sendToS3={this.sendToS3} onAddFileData={this.onAddFileData} fileInput={this.fileInput} />
-              </div>
 
               ) : (
-                <NewAlbumForm />
-              )
-            }
+                <NewAlbumForm newAlbumFormListener={this.newAlbumFormListener} albumTitle={this.state.newAlbumInput.title} albumImage={this.state.newAlbumInput.image} />
+              )}
             </div>
           </div>
-
         ) : (
           <div>
             <Loader />
@@ -339,17 +351,15 @@ class FileUploadContainer extends React.Component {
       }
 
       {!!this.state.preview &&
+
         <div>
           <h5>Upload Preview</h5>
           {this.renderPreview()}
         </div>
       }
 
-
     </div>
-  )
-
-}
+  )}
 }
 
 function mapStateToProps(state, props) {
@@ -361,7 +371,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction, createVersionAction}, dispatch)
+  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction, createAlbumAction, createVersionAction}, dispatch)
 }
 
 
