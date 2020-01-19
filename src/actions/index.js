@@ -67,6 +67,7 @@ export function createAlbumAction(albumData) {
         type: CREATE_ALBUM,
         payload: res
       })
+      return res
     })
   }
 }

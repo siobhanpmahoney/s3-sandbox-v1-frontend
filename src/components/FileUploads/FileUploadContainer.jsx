@@ -147,11 +147,15 @@ class FileUploadContainer extends React.Component {
 
     this.setState({
       newAlbumInput: updatedState
-    }, () => console.log(this.state.newAlbumInput))
+    })
   }
 
   onCreateAlbum = () => {
+    let albumData = this.state.newAlbumInput
+    console.log(albumData)
 
+    this.props.createAlbumAction(albumData)
+    .then(res => console.log(res))
   }
 
   onCreateSong = (inputValue) => {
@@ -339,7 +343,7 @@ class FileUploadContainer extends React.Component {
                 </div>
 
               ) : (
-                <NewAlbumForm newAlbumFormListener={this.newAlbumFormListener} albumTitle={this.state.newAlbumInput.title} albumImage={this.state.newAlbumInput.image} />
+                <NewAlbumForm newAlbumFormListener={this.newAlbumFormListener} albumTitle={this.state.newAlbumInput.title} albumImage={this.state.newAlbumInput.image} onCreateAlbum={this.onCreateAlbum}/>
               )}
             </div>
           </div>
