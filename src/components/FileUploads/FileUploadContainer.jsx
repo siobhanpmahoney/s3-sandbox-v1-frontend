@@ -15,6 +15,7 @@ import FileDateInput from './FileDateInput'
 import FileDescriptionInput from './FileDescriptionInput'
 import FileUploadConfirmation from './FileUploadConfirmation'
 import NewAlbumForm from './NewAlbumForm'
+import NewAlbumConfirmationMsg from './NewAlbumConfirmationMsg'
 // import { createSong } from '../../service'
 import Loader from '../utils/Loader'
 
@@ -70,6 +71,39 @@ class FileUploadContainer extends React.Component {
       isRenderingNewAlbumForm: !this.state.isRenderingNewAlbumForm
     })
   }
+
+  newAlbumFormListener = (event) => {
+    let val = event.target.value
+    let updatedState = this.state.newAlbumInput
+    updatedState[event.target.name] = event.target.value
+
+    this.setState({
+      newAlbumInput: updatedState
+    })
+  }
+
+  // clear form state
+  // render new album confirmation message
+  //
+
+  onCreateAlbum = () => {
+    let albumData = this.state.newAlbumInput
+
+    this.props.createAlbumAction(albumData)
+    .then(result => {
+      this.setState({
+        newAlbumInput: {
+          title: null,
+          image: null
+        }
+      }, this.onToggleNewAlbumForm)
+      return result 
+    })
+
+    .then(res => alert(`New Album Created: ${res.title}`))
+  }
+
+
 
   parseAlbumOptions = () => {
     if (this.state.songInput != null) {
@@ -140,23 +174,7 @@ class FileUploadContainer extends React.Component {
     }
   }
 
-  newAlbumFormListener = (event) => {
-    let val = event.target.value
-    let updatedState = this.state.newAlbumInput
-    updatedState[event.target.name] = event.target.value
 
-    this.setState({
-      newAlbumInput: updatedState
-    })
-  }
-
-  onCreateAlbum = () => {
-    let albumData = this.state.newAlbumInput
-    console.log(albumData)
-
-    this.props.createAlbumAction(albumData)
-    .then(res => console.log(res))
-  }
 
   onCreateSong = (inputValue) => {
     let albumInput = this.state.albumInput
@@ -192,7 +210,6 @@ class FileUploadContainer extends React.Component {
   sendToS3 = (event) => {
     event.preventDefault()
     let formdata = new FormData();
-    // formdata.append('song_id', this.state.songInput.id);
     formdata.append('date', this.state.dateInput)
     formdata.append('description', this.state.descriptionInput)
     formdata.append('file', this.state.files[0])
@@ -285,6 +302,8 @@ class FileUploadContainer extends React.Component {
     )
   }
 
+
+
   renderFileUploadConfirmation = () => {
     if (!!this.state.confirmedUploadedFile) {
       return (
@@ -343,7 +362,11 @@ class FileUploadContainer extends React.Component {
                 </div>
 
               ) : (
-                <NewAlbumForm newAlbumFormListener={this.newAlbumFormListener} albumTitle={this.state.newAlbumInput.title} albumImage={this.state.newAlbumInput.image} onCreateAlbum={this.onCreateAlbum}/>
+                <div>
+
+                  <NewAlbumForm newAlbumFormListener={this.newAlbumFormListener} albumTitle={this.state.newAlbumInput.title} albumImage={this.state.newAlbumInput.image} onCreateAlbum={this.onCreateAlbum}/>
+                </div>
+
               )}
             </div>
           </div>
