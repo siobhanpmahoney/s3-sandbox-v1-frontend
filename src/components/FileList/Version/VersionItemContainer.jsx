@@ -54,11 +54,14 @@ class VersionItemContainer extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="version-item-container-header"></div>
-        <VersionItemMetadata version={this.props.version} />
+      <div className="fileList__versionItem__container">
+        <div className="fileList__versionItem__wrapper">
+          <VersionItemMetadata version={this.props.version} />
+          {this.renderAudio()}
+        </div>
 
-       {this.renderAudio()}
+
+
 
 
 

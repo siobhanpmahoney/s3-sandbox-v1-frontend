@@ -1,6 +1,9 @@
 .App {
+  width: 100%;
+  position: relative;
   text-align: center;
   font-family: "SF Pro Rounded";
+  color: #0d0e0e;
 }
 
 .App-logo {
@@ -27,6 +30,7 @@
   flex-flow: column wrap;
   width: 100%;
   margin-bottom: 16px;
+  min-width: 100vw;
 }
 
 .nav__list {
@@ -38,7 +42,7 @@
 }
 
 .nav__list#endUser {
-  background-color: #BFC8CC;
+  background-color: #dee8e8;
 }
 
 .nav__list__wrapper {
@@ -72,6 +76,149 @@
 .nav__list-item .logOut {
   background: transparent !important;
 }
+
+/* --------------------------------------------------------- */
+/* --------------------------------------------------------- */
+/* --------------------------------------------------------- */
+/* -------------------------END NAV BAR-------------------------------- */
+
+.fileList__page {
+  position: relative;
+  width: 100%;
+}
+
+.fileList__albumItem {
+  position: relative;
+  padding: 0px 16px;
+}
+
+.fileList__albumItem__wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.fileList__album__section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 24px 24px 24px 0px;
+  padding: 0px 0px 16px 0px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  border: 0.25px solid #c4d5d5;
+}
+
+.fieList__album__header {
+  width: 100%;
+  padding: 6px 0px;
+  position: relative;
+  background-color: #c4d5d5;
+  color: white;
+}
+
+.fileList__songList {
+  width: 100%;
+  position: relative;
+
+  /* display: flex;
+  flex-flow: column wrap; */
+
+}
+
+.fileList__songItem__container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-bottom: 0.25px solid lightslategray;
+
+  padding: 12px 0px;
+}
+
+.fileList__songItem__wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 200px;
+  min-height: 200px;
+  display: flex;
+  flex-flow: column wrap;
+  flex: 1 1 auto;
+
+}
+
+.fileList__songItem__header {
+  margin: 6px 0px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.fileList__versionList {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  flex: 1 1 auto;
+}
+
+.fileList__versionItem__container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0.25px solid #c4d5d5;
+}
+
+.fileList__versionItem__wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-flow: column wrap;
+  flex: 1 1 auto;
+  align-content: flex-start;
+  align-items: space-around;
+}
+
+.fileList__versionItem__metadata {
+  padding: 12px;
+}
+
+.fileList__versionItem__metadata__date, .fileList__versionItem__metadata__description {
+  margin: 2px 0px;
+  font-size: 16px;
+}
+
+.fileList__versionItem__metadata__description{
+  color: grey;
+  font-size: 98%;
+}
+
+.color-entry-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  margin: 3px;
+  padding: 8px 0px 8px 0px;
+  border-bottom: 1px solid lightslategray;
+  align-items: space-around;
+  justify-content: space-around;
+  align-self: center;
+  align-content: center;
+  flex-flow: column wrap;
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+
+/* --------------------------------------------------------- */
+/* --------------------------------------------------------- */
+/* --------------------------------------------------------- */
+/* -------------------------END FILE LIST PAGE-------------------------------- */
 
 .file-upload-container {
   height: 100%;
@@ -127,43 +274,8 @@
   padding: 3px;
 }
 
-.version-item-container-header {
-}
 
-.album-list-item-component {
-  width: 100%;
-}
 
-.album-list-item-wrapper, .song-list-item-wrapper {
-  text-align: left;
-  width: 100%;
-}
-
-.album-list-item-heading {
-  color: #808080;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.song-list-item-component {
-  background-color: #fafafa;
-  box-sizing: border-box;
-  border: solid 1px #939393;
-  margin: 4px 0px;
-}
-
-.song-list-item-container {
-  padding: 12px 0px;
-  margin: 5px 0px;
-}
-
-.song-list-item-heading {
-  font-size: 16px;
-  font-weight: 500;
-  padding: 16px 0px;
-  color: #03363D;
-}
 
 .album-selection-page {
   box-sizing: border-box;

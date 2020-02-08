@@ -52,7 +52,7 @@ class FileListContainer extends React.Component {
 
     if (!!this.props.albums && this.props.albums.length > 1) {
       return (
-        <div>
+        <div className="fileList__page">
           {this.props.albums.map((album) => {
             return <AlbumListItem album={album} songList = {album.songs} key={album.id}/>
           })}

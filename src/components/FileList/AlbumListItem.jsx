@@ -1,5 +1,4 @@
 import React from 'react'
-import Collapse from "@kunukn/react-collapse";
 import SongListContainer from './Song/SongListContainer'
 
 // const AlbumListItem = ({album, songList}) => {
@@ -29,19 +28,19 @@ class AlbumListItem extends React.Component {
   }
 
   render() {
-    const duration = "300ms"
     return (
-      <div className="album-list-item-component">
-        <button className="album-list-item-wrapper" onClick={this.onToggleOpen}>
-          <div className="album-list-item-heading">
-            {this.props.album.title}
-          </div>
-        </button>
-          <Collapse transition={`height ${duration} cubic-bezier(0.4, 0, 0.2, 1)`} isOpen={this.state.isOpen} >
+      <div className="fileList__albumItem">
+        <div className="fileList__albumItem__wrapper">
+          <div className="fileList__album__section">
+
+            <div className="fieList__album__header">
+              {this.props.album.title}
+            </div>
+
             <SongListContainer songs={this.props.songList} />
-          </Collapse>
 
-
+          </div>
+        </div>
       </div>
     )
   }

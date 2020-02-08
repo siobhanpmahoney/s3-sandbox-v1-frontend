@@ -3,7 +3,7 @@ import VersionItemContainer from './VersionItemContainer'
 
 const VersionListContainer = ({versions}) => {
   return (
-    <div>
+    <div className="fileList__versionList">
       {versions.map((version) => {
         return <VersionItemContainer version={version} key={version.id} />
       })}
