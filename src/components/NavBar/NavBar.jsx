@@ -4,26 +4,28 @@ import ls from 'local-storage'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-const NavBar = ({logOutCurrentUser}) => {
+const NavBar = ({logOutCurrentUser, jwt}) => {
+
+  const adminList = () => {
+    return [
+      { to: '/admin/upload', text: 'Upload'},
+      { to: '/admin/manage', text: 'Manage'}
+    ]
+  }
 
   const list = () => {
-    return !!ls.get('jwt_token') ? (
-      [
-        { to: '/', text: 'Home'},
-        { to: '/admin/upload', text: 'Upload'},
-        { to: '/admin/manage', text: 'Manage'}
-      ]
-    ) : (
-      [
-        { to: '/', text: 'Home'}
-      ]
-    )
+
+    return [{ to: '/', text: 'Player'}]
+
   }
 
 
      return (
        <nav className="nav">
-         <NavList isLoggedIn={!!ls.get('jwt_token')} logOutCurrentUser={logOutCurrentUser} list={list()} />
+         {!!jwt &&
+           <NavList logOutCurrentUser={logOutCurrentUser} logOutCurrentUser={logOutCurrentUser} list={adminList()} isLoggedIn={!!ls.get('jwt_token')} type="admin" />
+         }
+         <NavList isLoggedIn={!!ls.get('jwt_token')} logOutCurrentUser={logOutCurrentUser} list={list()} type="endUser" />
        </nav>
      )
 

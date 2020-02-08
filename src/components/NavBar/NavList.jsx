@@ -11,30 +11,35 @@ const NavListItem = ({ to, children }) => {
       path={to}
       exact
       children={({ match }) => (
-        <li className={`nav__list-item${ match ? ' nav__list-item--active': '' }`}>
+        <div className={`nav__list-item${ match ? ' nav__list-item--active': '' }`}>
           <Link className="nav__list-item__link" to={to}>{children}</Link>
-        </li>
+        </div>
       )}
     />
   )
 }
 
-const NavList = ({ list, logOutCurrentUser, isLoggedIn }) => {
+const NavList = ({ list, logOutCurrentUser, isLoggedIn, type }) => {
   return (
-    <ul className="nav__list">
-      { list.map(({ text, to }) => (
-        <NavListItem key={text} to={to}>
-          { text }
-        </NavListItem>
-      ))}
+    <div className="nav__list" id={type}>
+      <div className="nav__list__wrapper">
+        { list.map(({ text, to }) => (
+          <NavListItem key={text} to={to}>
+            { text }
+          </NavListItem>
+        ))}
 
-      {!!isLoggedIn &&
-        <button className={`nav__list-item`} onClick={logOutCurrentUser}>
-          Log Out
-        </button>
+
+
+      {type == "admin" &&
+        <div key={"logout"} className={`nav__list-item logOut`} id={`nav__list-item__logOut`} onClick={logOutCurrentUser}>
+          <Link className="nav__list-item__link">Logout</Link>
+
+        </div>
+
       }
-
-    </ul>
+      </div>
+    </div>
   )
 }
 

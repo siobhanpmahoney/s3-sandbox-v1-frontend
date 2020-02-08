@@ -35,6 +35,7 @@ class App extends React.Component {
 		if (ls.get('jwt_token')) {
 			ls.remove('jwt_token')
 			this.props.removeCurrentUserAction()
+			return this.renderNav()
 		}
 	}
 
@@ -53,12 +54,18 @@ class App extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
+
+
 		if (prevProps.songs.length != this.props.songs.length) {
 			console.log("prevProps: ", prevProps.songs.length)
 			console.log("props.songs.length: ", this.props.songs.length)
 			this.props.fetchSongDataAction()
 		}
 
+	}
+
+	renderNav = () => {
+		return <NavBar jwt={ls.get('jwt_token')} logOutCurrentUser={this.logOutCurrentUser} />
 	}
 
 	switchView = (event) => {
@@ -83,7 +90,7 @@ class App extends React.Component {
 				<div className="app">
 
 
-					<NavBar logOutCurrentUser={this.logOutCurrentUser}/>
+					{this.renderNav()}
 					<Switch>
 
 						<Route exact path='/login' render={(routerProps) => {

@@ -21,9 +21,56 @@
   color: #09d3ac;
 }
 
-.app {
-  margin: 8px;
-  padding: 14px;
+.nav {
+  position: relative;
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.nav__list {
+  border: #f6f7fc 1px solid;
+}
+
+.nav__list#admin {
+  background-color: #162637;
+}
+
+.nav__list#endUser {
+  background-color: #BFC8CC;
+}
+
+.nav__list__wrapper {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 6px;
+  padding: 6px;
+}
+
+.nav__list-item {
+  padding: 6px;
+  margin: 0px 12px;
+  border: 1px white solid;
+
+}
+
+.nav__list-item__link {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+
+}
+
+.nav__list-item--active {
+  background-color: #F9454e;
+}
+
+.nav__list-item .logOut {
+  background: transparent !important;
 }
 
 .file-upload-container {
