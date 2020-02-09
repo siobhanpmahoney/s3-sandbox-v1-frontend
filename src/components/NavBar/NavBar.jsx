@@ -4,7 +4,7 @@ import ls from 'local-storage'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-const NavBar = ({logOutCurrentUser, jwt}) => {
+const NavBar = ({ user, logOutCurrentUser}) => {
 
   const adminList = () => {
     return [
@@ -22,10 +22,10 @@ const NavBar = ({logOutCurrentUser, jwt}) => {
 
      return (
        <nav className="nav">
-         {!!jwt &&
-           <NavList logOutCurrentUser={logOutCurrentUser} logOutCurrentUser={logOutCurrentUser} list={adminList()} isLoggedIn={!!ls.get('jwt_token')} type="admin" />
+         {!!user && user.id &&
+           <NavList logOutCurrentUser={logOutCurrentUser} logOutCurrentUser={logOutCurrentUser} list={adminList()} isLoggedIn={!!user && user.id} type="admin" />
          }
-         <NavList isLoggedIn={!!ls.get('jwt_token')} logOutCurrentUser={logOutCurrentUser} list={list()} type="endUser" />
+         <NavList isLoggedIn={!!user && !!user.id} logOutCurrentUser={logOutCurrentUser} list={list()} type="endUser" />
        </nav>
      )
 

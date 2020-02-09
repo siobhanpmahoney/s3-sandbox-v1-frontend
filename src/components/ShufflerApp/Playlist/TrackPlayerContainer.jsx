@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouter} from 'react-router'
+import {withRouter, } from 'react-router'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Loader from '../../utils/Loader'
@@ -32,6 +32,12 @@ class TrackPlayerContainer extends React.Component {
     if (prevState != this.state) {
       this.renderTrackPlayer()
     }
+
+    // if (!!prevProps.user.id && !this.props.user.id) {
+    //   return this.props.history.push("/")
+    // }
+
+
   }
 
 // parses song:track from routeparams => dictionary pairing ids
@@ -113,15 +119,18 @@ class TrackPlayerContainer extends React.Component {
 
 
   renderTrackPlayer = () => {
-    return !this.props.album || !this.state.currentTrack ? (
-       <Loader />
-    ) : (
-      <TrackPlayer ref={this.audio} currentTrack={this.state.currentTrack} onSelectTrack={this.onSelectTrack} onTrackChange={this.onTrackChange} songEnd={this.songEnd} onClickNext={this.onClickNext} trackList={this.retrievedTracks()}/>
-    )
+    return <TrackPlayer ref={this.audio} currentTrack={this.state.currentTrack} onSelectTrack={this.onSelectTrack} onTrackChange={this.onTrackChange} songEnd={this.songEnd} onClickNext={this.onClickNext} trackList={this.retrievedTracks()}/>
+
+          // !this.props.album || !this.state.currentTrack ? (
+          //    <Loader />
+          // ) : ()
   }
 
 
   render() {
+
+    console.log("TrackPlayerContainer", this.props)
+    console.log("location.search props",   this.props.location.search)
     if (!!this.props.album) {
       console.log("retrievedTracks", this.retrievedTracks()[0])
     }
@@ -146,6 +155,7 @@ class TrackPlayerContainer extends React.Component {
 
 function mapStateToProps(state, props) {
     return {
+      user: state.user,
       album: state.albums && state.albums.find((a) => a.id == props.albumId)
     }
   }

@@ -17,7 +17,7 @@ import ls from 'local-storage'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux';
-import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction} from './actions'
+import {removeCurrentUserAction, fetchAlbumDataAction, fetchSongDataAction, fetchCurrentUserAction} from './actions'
 
 
 class App extends React.Component {
@@ -32,16 +32,20 @@ class App extends React.Component {
 	}
 
 	logOutCurrentUser = () => {
+
 		if (ls.get('jwt_token')) {
 			ls.remove('jwt_token')
 			this.props.removeCurrentUserAction()
-			return this.renderNav()
+			// return this.renderNav()
 		}
 	}
 
 	componentDidMount() {
 		this.props.fetchAlbumDataAction()
 		this.props.fetchSongDataAction()
+		if (ls.get('jwt_token') && !this.props.user.id) {
+		 this.props.fetchCurrentUserAction(ls.get('jwt_token'))
+	 }
 		// this.fetchAlbumsForState()
 		// .then(res => this.setState({
 		// 	view: "upload",
@@ -57,16 +61,15 @@ class App extends React.Component {
 
 
 		if (prevProps.songs.length != this.props.songs.length) {
-			console.log("prevProps: ", prevProps.songs.length)
-			console.log("props.songs.length: ", this.props.songs.length)
+
 			this.props.fetchSongDataAction()
 		}
 
 	}
 
-	renderNav = () => {
-		return <NavBar jwt={ls.get('jwt_token')} logOutCurrentUser={this.logOutCurrentUser} />
-	}
+	// renderNav = () => {
+	// 	return <NavBar logOutCurrentUser={this.logOutCurrentUser} />
+	// }
 
 	switchView = (event) => {
 		let val = event.target.value
@@ -78,7 +81,6 @@ class App extends React.Component {
 
 
 	render() {
-
 		if (!this.props.albums || !this.props.songs) {
 			return (
 				<div className="app">
@@ -90,7 +92,7 @@ class App extends React.Component {
 				<div className="app">
 
 
-					{this.renderNav()}
+					<NavBar logOutCurrentUser={this.logOutCurrentUser} />
 					<Switch>
 
 						<Route exact path='/login' render={(routerProps) => {
@@ -109,13 +111,14 @@ class App extends React.Component {
 										return <ShufflerAppContainer history={routerProps.history} />
 									}} />
 
-						<Route exact path="/music" render={(routerProps) => {
+					<Route path="/albums/:albumId" render={(routerProps) => {
+							return <TrackPlayerContainer albumId={routerProps.match.params.albumId} history={routerProps.history} songParams={routerProps.match.params.songParams} />
+					}} />
+
+								<Route exact path="/albums" render={(routerProps) => {
 								return <AlbumSelectionContainer history={routerProps.history} />
 							}} />
 
-						<Route path="/playlist/album=:albumId" render={(routerProps) => {
-								return <TrackPlayerContainer albumId={routerProps.match.params.albumId} albumApp={this.props.albums.find((album) => routerProps.match.params.albumId == album.id)} history={routerProps.history} songParams={routerProps.match.params.songParams} />
-							}} />
 
 
 
@@ -138,7 +141,7 @@ function mapStateToProps(state, props) {
 	}
 
 function mapDispatchToProps(dispatch) {
-	  return bindActionCreators({removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction}, dispatch)
+	  return bindActionCreators({fetchCurrentUserAction, removeCurrentUserAction,fetchAlbumDataAction, fetchSongDataAction}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

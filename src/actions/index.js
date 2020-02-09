@@ -36,6 +36,7 @@ export function removeCurrentUserAction() {
 }
 
 export function fetchAlbumDataAction() {
+  console.log("in fetchAlbumDataAction")
   return(dispatch) => {
     return fetchAlbums()
     .then(response => {
@@ -79,7 +80,6 @@ export function createVersionAction(song, formdata) {
     return createSong({album_id: song.album_id, title: song.title})
     .then(response => {
       song = Object.assign({}, song, response)
-      console.log(song)
       return song
     })
     .then(newSong => {

@@ -33,7 +33,8 @@ const NavList = ({ list, logOutCurrentUser, isLoggedIn, type }) => {
 
       {type == "admin" &&
         <div key={"logout"} className={`nav__list-item logOut`} id={`nav__list-item__logOut`} onClick={logOutCurrentUser}>
-          <Link className="nav__list-item__link">Logout</Link>
+
+          <div className="nav__list-item__link">Logout</div>
 
         </div>
 

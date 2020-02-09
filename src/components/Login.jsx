@@ -60,9 +60,9 @@ class Login extends React.Component {
     })
     .then(jwt => this.props.fetchCurrentUserAction(jwt)) // returns user info
     .then(res => {
-      if (this.props.user.id) {
+      // if (this.props.user.id) {
         return this.props.history.push("/")
-      }
+      // }
     })
   }
 

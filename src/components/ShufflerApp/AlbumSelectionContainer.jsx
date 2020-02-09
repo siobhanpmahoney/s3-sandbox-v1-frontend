@@ -17,7 +17,6 @@ const AlbumSelectionContainer = (props) => {
       let obj = Object.assign({}, version, s)
       return obj
     })
-    console.log(list)
   }
 
     return (

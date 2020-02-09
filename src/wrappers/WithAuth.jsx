@@ -10,20 +10,21 @@ export default function (WrappedComponent) {
   class WithAuth extends React.Component {
 
 
-    componentDidMount() {
-       if (ls.get('jwt_token') && !this.props.user.id) {
-        this.props.fetchCurrentUserAction(ls.get('jwt_token'))
-        // .then(user_id => {
-        //   debugger
-        //   return user_id.json()
-        // })
-
-       }
-
-    }
+    // componentDidMount() {
+    //    if (ls.get('jwt_token') && !this.props.user.id) {
+    //     this.props.fetchCurrentUserAction(ls.get('jwt_token'))
+    //     // .then(user_id => {
+    //     //   debugger
+    //     //   return user_id.json()
+    //     // })
+    //
+    //    }
+    //
+    // }
 
     componentDidUpdate(prevProps) {
       if (prevProps.user.id && !this.props.user.id && !ls.get('jwt_token')) {
+        
         return (
           <Redirect to="/" />
         )

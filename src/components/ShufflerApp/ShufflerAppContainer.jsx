@@ -9,7 +9,7 @@ class ShufflerAppContainer extends React.Component {
   }
 
   goToPage = () => {
-    return this.props.history.push("/music")
+    return this.props.history.push("/albums")
   }
 
   render() {

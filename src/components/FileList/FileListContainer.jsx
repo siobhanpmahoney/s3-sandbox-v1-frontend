@@ -48,7 +48,6 @@ class FileListContainer extends React.Component {
   // }
 
   render() {
-    console.log("props at render", this.props)
 
     if (!!this.props.albums && this.props.albums.length > 1) {
       return (
