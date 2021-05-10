@@ -9,7 +9,7 @@
     "file-selector": "^0.1.12",
     "html-to-json": "^0.6.0",
     "local-storage": "^2.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^16.9.0",
     "react-day-picker": "^7.4.0",
     "react-dom": "^16.9.0",
